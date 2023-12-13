@@ -15,6 +15,8 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @export var right_button = "ui_right"
 @export var jump_button = "ui_accept"
 
+@export var deathParticle: PackedScene
+
 func _ready():
 	$Sprite2D.modulate = PlayerColor
 
@@ -49,4 +51,9 @@ func _physics_process(delta):
 		var body = $HeadCast.get_collider()
 		if body.is_in_group("player"):
 			emit_signal("im_dead")
+			
+			var par = deathParticle.instantiate()
+			par.emitting = true
+			par.position = position
+			get_tree().current_scene.add_child(par)
 			queue_free()

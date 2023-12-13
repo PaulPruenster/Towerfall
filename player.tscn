@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://chqr0wbi22ox"]
+[gd_scene load_steps=5 format=3 uid="uid://chqr0wbi22ox"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_dmoi7"]
+[ext_resource type="PackedScene" uid="uid://bgbtxyo02cbx2" path="res://explosion.tscn" id="2_hq8pn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v8e8u"]
 size = Vector2(12, 23.5)
@@ -9,6 +10,7 @@ size = Vector2(12, 23.5)
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_dmoi7")
+deathParticle = ExtResource("2_hq8pn")
 
 [node name="Body" type="CollisionShape2D" parent="."]
 scale = Vector2(2, 2)
