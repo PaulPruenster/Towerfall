@@ -21,6 +21,13 @@ left_button = "p1_left"
 right_button = "p1_right"
 jump_button = "p1_jump"
 
+[node name="Player2" parent="." instance=ExtResource("1_qrk84")]
+position = Vector2(974, 528)
+PlayerColor = Color(1, 0, 0, 1)
+left_button = "p2_left"
+right_button = "p2_right"
+jump_button = "p2_jump"
+
 [node name="Floor" parent="." instance=ExtResource("2_ow1u0")]
 position = Vector2(255, 590)
 
@@ -30,13 +37,6 @@ position = Vector2(938, 591)
 [node name="Floor3" parent="." instance=ExtResource("2_ow1u0")]
 position = Vector2(596, 318)
 scale = Vector2(0.320001, 1)
-
-[node name="Player2" parent="." instance=ExtResource("1_qrk84")]
-position = Vector2(974, 528)
-PlayerColor = Color(1, 0, 0, 1)
-left_button = "p2_left"
-right_button = "p2_right"
-jump_button = "p2_jump"
 
 [node name="Label" type="Label" parent="."]
 offset_left = -1.0

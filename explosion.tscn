@@ -1,35 +1,36 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgbtxyo02cbx2"]
+[gd_scene load_steps=7 format=3 uid="uid://bgbtxyo02cbx2"]
 
 [ext_resource type="Texture2D" uid="uid://cykx3e5nsivg2" path="res://Flame.png" id="1_d5gvx"]
 
-[sub_resource type="Gradient" id="Gradient_smnbg"]
-colors = PackedColorArray(0.882569, 0.749896, 0, 1, 0.77802, 0, 0.220747, 1)
+[sub_resource type="Gradient" id="Gradient_rbprb"]
+offsets = PackedFloat32Array(0, 0.622951)
+colors = PackedColorArray(1, 1, 0, 1, 1, 0, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_xq1aa"]
-gradient = SubResource("Gradient_smnbg")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7cbfp"]
+gradient = SubResource("Gradient_rbprb")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k3758"]
+[sub_resource type="Curve" id="Curve_7y4ah"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.750751, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ok8lg"]
+curve = SubResource("Curve_7y4ah")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sjb2l"]
+lifetime_randomness = 0.5
 particle_flag_disable_z = true
-direction = Vector3(0, 0, 0)
-initial_velocity_min = 200.0
-initial_velocity_max = 200.0
-angular_velocity_min = 100.0
-angular_velocity_max = 100.0
-orbit_velocity_min = -0.5
-orbit_velocity_max = 0.5
-radial_velocity_min = 10.0
-radial_velocity_max = 10.0
+spread = 180.0
+initial_velocity_min = 250.0
+initial_velocity_max = 500.0
 gravity = Vector3(0, 0, 0)
-linear_accel_min = 10.0
-linear_accel_max = 10.0
-scale_min = 0.1
-scale_max = 0.5
-color_ramp = SubResource("GradientTexture1D_xq1aa")
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_ok8lg")
+color_ramp = SubResource("GradientTexture1D_7cbfp")
 
 [node name="Explosion" type="GPUParticles2D"]
 emitting = false
-amount = 100
-process_material = SubResource("ParticleProcessMaterial_k3758")
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_sjb2l")
 texture = ExtResource("1_d5gvx")
 one_shot = true
-preprocess = 0.5
+explosiveness = 1.0
