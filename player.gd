@@ -20,8 +20,11 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 func other_player_on_head():
 	for cast in $Casts.get_children():
 		var ray = cast as RayCast2D
+		ray.force_raycast_update()
 		if ray.is_colliding() and ray.get_collider().is_in_group("player"):
-			return true
+			var other_player = ray.get_collider() as CharacterBody2D
+			if other_player.velocity.y > 0:
+				return true
 	return false
 
 func _ready():
