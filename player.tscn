@@ -21,6 +21,16 @@ position = Vector2(-4.76837e-07, 2.14577e-06)
 scale = Vector2(24, 48)
 texture = SubResource("CanvasTexture_21paj")
 
-[node name="HeadCast" type="RayCast2D" parent="."]
-position = Vector2(-12, -28)
-target_position = Vector2(24, 0)
+[node name="Casts" type="Node2D" parent="."]
+
+[node name="HeadCast3" type="RayCast2D" parent="Casts"]
+position = Vector2(11, -24)
+target_position = Vector2(0, -9)
+
+[node name="HeadCast" type="RayCast2D" parent="Casts"]
+position = Vector2(0, -24)
+target_position = Vector2(0, -9)
+
+[node name="HeadCast2" type="RayCast2D" parent="Casts"]
+position = Vector2(-11, -24)
+target_position = Vector2(0, -9)

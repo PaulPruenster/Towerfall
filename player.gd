@@ -17,6 +17,13 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 @export var deathParticle: PackedScene
 
+func other_player_on_head():
+	for cast in $Casts.get_children():
+		var ray = cast as RayCast2D
+		if ray.is_colliding() and ray.get_collider().is_in_group("player"):
+			return true
+	return false
+
 func _ready():
 	$Sprite2D.modulate = PlayerColor
 
@@ -46,14 +53,12 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
-	
-	if $HeadCast.is_colliding():
-		var body = $HeadCast.get_collider()
-		if body.is_in_group("player"):
-			emit_signal("im_dead")
-			
-			var par = deathParticle.instantiate()
-			par.emitting = true
-			par.position = position
-			get_tree().current_scene.add_child(par)
-			queue_free()
+
+	if other_player_on_head():
+		emit_signal("im_dead")
+		
+		var par = deathParticle.instantiate()
+		par.emitting = true
+		par.position = position
+		get_tree().current_scene.add_child(par)
+		queue_free()
