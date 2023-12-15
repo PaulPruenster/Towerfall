@@ -35,6 +35,7 @@ color_ramp = SubResource("GradientTexture1D_f7iwi")
 script = ExtResource("1_qpdqc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
 shape = SubResource("RectangleShape2D_2pt5r")
 
 [node name="ColorRect" type="ColorRect" parent="CollisionShape2D"]

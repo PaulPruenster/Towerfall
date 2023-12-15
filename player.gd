@@ -13,10 +13,11 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var jumping = false
 
 @export_color_no_alpha var PlayerColor
-@export var left_button = "ui_left"
-@export var right_button = "ui_right"
-@export var jump_button = "ui_accept"
-@export var _button = "p1_use"
+@export var left_button = "p1_left"
+@export var right_button = "p1_right"
+@export var up_button = "p1_up"
+@export var down_button = "p1_down"
+@export var use_button = "p1_use"
 
 @export var deathParticle: PackedScene
 @export var arrow: PackedScene
@@ -63,25 +64,25 @@ func _physics_process(delta):
 	if position.x < 0: position.x = width
 
 	# Handle jump
-	if Input.is_action_just_pressed(jump_button) and is_on_floor():
+	if Input.is_action_just_pressed(up_button) and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
 	# Get the input direction and handle the movement/deceleration.
-	var direction = Input.get_axis(left_button, right_button)
-	if direction:
-		velocity.x = direction * SPEED
+	var direction = Input.get_vector(left_button, right_button, up_button, down_button)
+	
+	if direction != Vector2.ZERO:
+		velocity.x = direction.x * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
 	
-	if Input.is_action_just_pressed("p1_use"):
-		if direction != 0:
+	if Input.is_action_just_pressed(use_button):
+		print(direction)
+		if direction != Vector2.ZERO:
 			var arr = arrow.instantiate() as CharacterBody2D
-			arr.position.x = position.x + 30 * sign(direction)
-			arr.position.y = position.y
-
-			arr.direction = Vector2(direction, 0).normalized()
+			arr.position = position + 30 * sign(direction)
+			arr.direction = direction
 			get_parent().add_child(arr)
 
 	if other_player_on_head():

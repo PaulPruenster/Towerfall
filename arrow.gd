@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-@export var direction = Vector2(1,0)
-@export var speed = 500
+@export var direction = Vector2(0,0)
+@export var speed = 1000
 
 func _physics_process(delta):
 	var width = ProjectSettings.get_setting("display/window/size/viewport_width", 320)
@@ -10,6 +10,8 @@ func _physics_process(delta):
 	if position.x > width: position.x = 0
 	if position.y < 0: position.y = height
 	if position.x < 0: position.x = width
+	
+	rotation = atan2(direction.x, -direction.y)
 	
 	var collision_info = move_and_collide(direction.normalized() * delta * speed)
 	if collision_info:

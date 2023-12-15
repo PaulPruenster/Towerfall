@@ -15,18 +15,17 @@ offset_bottom = 722.0
 color = Color(0.14902, 0.14902, 0.14902, 1)
 
 [node name="Player1" parent="." instance=ExtResource("1_qrk84")]
-position = Vector2(836, 509)
+position = Vector2(271, 308)
 PlayerColor = Color(0, 1, 0, 1)
-left_button = "p1_left"
-right_button = "p1_right"
-jump_button = "p1_jump"
 
 [node name="Player2" parent="." instance=ExtResource("1_qrk84")]
 position = Vector2(974, 528)
 PlayerColor = Color(1, 0, 0, 1)
 left_button = "p2_left"
 right_button = "p2_right"
-jump_button = "p2_jump"
+up_button = "p2_up"
+down_button = "p2_down"
+use_button = "p2_use"
 
 [node name="Floor" parent="." instance=ExtResource("2_ow1u0")]
 position = Vector2(273, 375)
@@ -54,7 +53,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 2.0
 one_shot = true
 
 [connection signal="im_dead" from="Player1" to="." method="_on_player_1_im_dead"]
