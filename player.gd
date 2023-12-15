@@ -16,8 +16,10 @@ var jumping = false
 @export var left_button = "ui_left"
 @export var right_button = "ui_right"
 @export var jump_button = "ui_accept"
+@export var _button = "p1_use"
 
 @export var deathParticle: PackedScene
+@export var arrow: PackedScene
 
 func other_player_on_head():
 	for cast in $Casts.get_children():
@@ -28,6 +30,15 @@ func other_player_on_head():
 			if other_player.velocity.y > 0:
 				return true
 	return false
+	
+func set_dead():
+	emit_signal("im_dead")
+	
+	var par = deathParticle.instantiate()
+	par.emitting = true
+	par.position = position
+	get_tree().current_scene.add_child(par)
+	queue_free()
 
 func _ready():
 	$Sprite2D.modulate = PlayerColor
@@ -46,10 +57,10 @@ func _physics_process(delta):
 	var width = ProjectSettings.get_setting("display/window/size/viewport_width", 320)
 	var height = ProjectSettings.get_setting("display/window/size/viewport_height", 240)
 
-	if position.y > height and velocity.y > 0: position.y = 0
-	if position.x > width and velocity.x > 0: position.x = 0
-	if position.y <= 0 and velocity.y < 0: position.y = height
-	if position.x <= 0 and velocity.x < 0: position.x = width
+	if position.y > height: position.y = 0
+	if position.x > width: position.x = 0
+	if position.y < 0: position.y = height
+	if position.x < 0: position.x = width
 
 	# Handle jump
 	if Input.is_action_just_pressed(jump_button) and is_on_floor():
@@ -63,12 +74,15 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
+	
+	if Input.is_action_just_pressed("p1_use"):
+		if direction != 0:
+			var arr = arrow.instantiate() as CharacterBody2D
+			arr.position.x = position.x + 30 * sign(direction)
+			arr.position.y = position.y
+
+			arr.direction = Vector2(direction, 0).normalized()
+			get_parent().add_child(arr)
 
 	if other_player_on_head():
-		emit_signal("im_dead")
-		
-		var par = deathParticle.instantiate()
-		par.emitting = true
-		par.position = position
-		get_tree().current_scene.add_child(par)
-		queue_free()
+		set_dead()

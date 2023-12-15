@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://chqr0wbi22ox"]
+[gd_scene load_steps=12 format=3 uid="uid://chqr0wbi22ox"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_dmoi7"]
 [ext_resource type="PackedScene" uid="uid://bgbtxyo02cbx2" path="res://explosion.tscn" id="2_hq8pn"]
+[ext_resource type="PackedScene" uid="uid://ci80vsl1gccld" path="res://arrow.tscn" id="3_s2ths"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v8e8u"]
 size = Vector2(12, 23.5)
@@ -42,6 +43,7 @@ color_ramp = SubResource("GradientTexture1D_q3k5u")
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_dmoi7")
 deathParticle = ExtResource("2_hq8pn")
+arrow = ExtResource("3_s2ths")
 
 [node name="Body" type="CollisionShape2D" parent="."]
 scale = Vector2(2, 2)
