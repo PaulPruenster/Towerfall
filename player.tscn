@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://chqr0wbi22ox"]
+[gd_scene load_steps=10 format=3 uid="uid://chqr0wbi22ox"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_dmoi7"]
 [ext_resource type="PackedScene" uid="uid://bgbtxyo02cbx2" path="res://explosion.tscn" id="2_hq8pn"]
@@ -9,16 +9,9 @@ size = Vector2(12, 23.5)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_21paj"]
 
-[sub_resource type="Gradient" id="Gradient_iyx31"]
-offsets = PackedFloat32Array(0, 0.868852)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_q3k5u"]
-gradient = SubResource("Gradient_iyx31")
-
 [sub_resource type="Curve" id="Curve_dg675"]
-_data = [Vector2(0.495495, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
+_data = [Vector2(0.747748, 1), 0.0, 0.0, 0, 0, Vector2(0.750751, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_f5t13"]
 curve = SubResource("Curve_dg675")
@@ -28,15 +21,14 @@ lifetime_randomness = 0.5
 particle_flag_disable_z = true
 velocity_pivot = Vector3(1, 0, 0)
 direction = Vector3(0, 0, 0)
-initial_velocity_min = 50.0
-initial_velocity_max = 100.0
+initial_velocity_min = 10.0
+initial_velocity_max = 70.0
 gravity = Vector3(0, 0, 0)
 linear_accel_max = 10.0
 radial_accel_max = 10.0
 scale_min = 0.5
-scale_max = 3.0
+scale_max = 5.0
 scale_curve = SubResource("CurveTexture_f5t13")
-color_ramp = SubResource("GradientTexture1D_q3k5u")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_xtq8u"]
 
