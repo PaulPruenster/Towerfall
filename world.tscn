@@ -16,11 +16,11 @@ color = Color(0.14902, 0.14902, 0.14902, 1)
 
 [node name="Player1" parent="." instance=ExtResource("1_qrk84")]
 position = Vector2(271, 308)
-PlayerColor = Color(0, 1, 0, 1)
+player_color = Color(0, 1, 0, 1)
 
 [node name="Player2" parent="." instance=ExtResource("1_qrk84")]
 position = Vector2(974, 528)
-PlayerColor = Color(1, 0, 0, 1)
+player_color = Color(1, 0, 0, 1)
 left_button = "p2_left"
 right_button = "p2_right"
 up_button = "p2_up"

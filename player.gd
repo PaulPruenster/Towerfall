@@ -11,8 +11,10 @@ signal im_dead
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var jumping = false
+var aiming = false
 
-@export_color_no_alpha var PlayerColor
+@export_color_no_alpha var player_color
+@export_color_no_alpha var aim_color = Color("#FFF")
 @export var left_button = "p1_left"
 @export var right_button = "p1_right"
 @export var up_button = "p1_up"
@@ -43,14 +45,14 @@ func set_dead():
 	get_tree().current_scene.add_child(par)
 	queue_free()
 
-func _ready():
-	$Sprite2D.modulate = PlayerColor
-
 func _physics_process(delta):
 	# Add the gravity
 	if not is_on_floor() and velocity.y < TERMINAL_VELOCITY:
 		velocity.y += gravity * delta
-	
+		
+	aiming = Input.is_action_pressed(use_button)
+	$Sprite2D.modulate = player_color
+		
 	if jumping and is_on_floor():
 		$Landing.emitting = true
 	jumping = not is_on_floor()
@@ -65,32 +67,35 @@ func _physics_process(delta):
 	if position.x < 0: position.x = width
 
 	# Handle jump
-	if Input.is_action_just_pressed(up_button) and is_on_floor():
+	if Input.is_action_just_pressed(up_button) and is_on_floor() and not aiming:
 		velocity.y = JUMP_VELOCITY
+		
+	if other_player_on_head():
+		set_dead()
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_vector(left_button, right_button, up_button, down_button)
-	if direction != Vector2.ZERO:
+	if direction != Vector2.ZERO and not aiming:
 		velocity.x = direction.x * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	move_and_slide()
 	
+	if aiming and direction != Vector2.ZERO:
+		$Sprite2D.modulate = aim_color
+
 	# Shoot arrow
-	if Input.is_action_just_pressed(use_button):
+	if Input.is_action_just_released(use_button):
 		if direction != Vector2.ZERO and arrow_count > 0:
 			var arr = arrow.instantiate() as CharacterBody2D
-			arr.position = position + 50 * sign(direction)
+			arr.position.x = position.x + 10 * sign(direction.x)
+			arr.position.y = position.y + 30 * sign(direction.y)
 			arr.direction = direction
 			get_parent().add_child(arr)
 			arrow_count -= 1
-
-	if other_player_on_head():
-		set_dead()
 		
 	# Arrow pickup
 	$ArrowCount.text = str(arrow_count)
-	
 	for index in range(get_slide_collision_count()):
 		var collision = get_slide_collision(index).get_collider()
 		if collision.is_in_group("arrow"):
