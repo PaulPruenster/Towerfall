@@ -66,6 +66,7 @@ emitting = false
 amount = 50
 process_material = SubResource("ParticleProcessMaterial_pwy4d")
 texture = SubResource("CanvasTexture_xtq8u")
+lifetime = 0.5
 one_shot = true
 preprocess = 1.0
 

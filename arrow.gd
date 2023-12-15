@@ -4,6 +4,7 @@ extends CharacterBody2D
 @export var speed = 1000
 
 const arrow_dummy = preload("res://arrow_dummy.tscn")
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _physics_process(delta):
 	var width = ProjectSettings.get_setting("display/window/size/viewport_width", 320)
@@ -14,6 +15,8 @@ func _physics_process(delta):
 	if position.x < 0: position.x = width
 	
 	rotation = atan2(direction.x, -direction.y)
+	
+	direction.y += gravity * delta * 0.001
 	
 	var collision_info = move_and_collide(direction.normalized() * delta * speed)
 	if collision_info:
