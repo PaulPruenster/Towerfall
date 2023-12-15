@@ -10,6 +10,8 @@ signal im_dead
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
+var jumping = false
+
 @export_color_no_alpha var PlayerColor
 @export var left_button = "ui_left"
 @export var right_button = "ui_right"
@@ -33,7 +35,12 @@ func _ready():
 func _physics_process(delta):
 	# Add the gravity
 	if not is_on_floor() and velocity.y < TERMINAL_VELOCITY:
-		velocity.y += gravity * delta	
+		velocity.y += gravity * delta
+	
+	if jumping and is_on_floor():
+		$Landing.emitting = true
+	
+	jumping = not is_on_floor()
 
 	# Player wrapping
 	var width = ProjectSettings.get_setting("display/window/size/viewport_width", 320)

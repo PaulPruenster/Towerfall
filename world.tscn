@@ -29,20 +29,24 @@ right_button = "p2_right"
 jump_button = "p2_jump"
 
 [node name="Floor" parent="." instance=ExtResource("2_ow1u0")]
-position = Vector2(255, 590)
+position = Vector2(273, 375)
 
 [node name="Floor2" parent="." instance=ExtResource("2_ow1u0")]
-position = Vector2(938, 591)
+position = Vector2(879, 594)
 
 [node name="Floor3" parent="." instance=ExtResource("2_ow1u0")]
-position = Vector2(596, 318)
+position = Vector2(607, 151)
+scale = Vector2(0.320001, 1)
+
+[node name="Floor4" parent="." instance=ExtResource("2_ow1u0")]
+position = Vector2(945, 310)
 scale = Vector2(0.320001, 1)
 
 [node name="Label" type="Label" parent="."]
-offset_left = -1.0
-offset_top = 73.0
-offset_right = 1153.0
-offset_bottom = 210.0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 1155.0
+offset_bottom = 139.0
 theme_override_colors/font_color = Color(0.882353, 0, 0.541176, 1)
 theme_override_font_sizes/font_size = 69
 text = "Towerfall"
