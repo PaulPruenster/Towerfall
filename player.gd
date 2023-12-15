@@ -88,8 +88,8 @@ func _physics_process(delta):
 	if Input.is_action_just_released(use_button):
 		if direction != Vector2.ZERO and arrow_count > 0:
 			var arr = arrow.instantiate() as CharacterBody2D
-			arr.position.x = position.x + 10 * sign(direction.x)
-			arr.position.y = position.y + 30 * sign(direction.y)
+			arr.position.x = position.x + 20 * sign(direction.x)
+			arr.position.y = position.y + 40 * sign(direction.y)
 			arr.direction = direction
 			get_parent().add_child(arr)
 			arrow_count -= 1
