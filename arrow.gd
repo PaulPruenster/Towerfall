@@ -3,6 +3,8 @@ extends CharacterBody2D
 @export var direction = Vector2(0,0)
 @export var speed = 1000
 
+const arrow_dummy = preload("res://arrow_dummy.tscn")
+
 func _physics_process(delta):
 	var width = ProjectSettings.get_setting("display/window/size/viewport_width", 320)
 	var height = ProjectSettings.get_setting("display/window/size/viewport_height", 240)
@@ -18,4 +20,9 @@ func _physics_process(delta):
 		queue_free()
 		if collision_info.get_collider().is_in_group("player"):
 			collision_info.get_collider().set_dead()
+		else:
+			var dummy = arrow_dummy.instantiate()
+			dummy.position = position
+			get_parent().add_child(dummy)
+			
 		

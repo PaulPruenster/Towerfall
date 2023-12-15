@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://arrow.gd" id="1_qpdqc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2pt5r"]
-size = Vector2(20, 6)
+size = Vector2(12, 4)
 
 [sub_resource type="Gradient" id="Gradient_fqg0j"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 0.866667, 0.0235294, 1)
@@ -39,12 +39,13 @@ rotation = 1.5708
 shape = SubResource("RectangleShape2D_2pt5r")
 
 [node name="ColorRect" type="ColorRect" parent="CollisionShape2D"]
-offset_left = -10.0
-offset_top = -3.0
-offset_right = 10.0
-offset_bottom = 3.0
+offset_left = -6.0
+offset_top = -2.0
+offset_right = 6.0
+offset_bottom = 2.0
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+visible = false
 amount = 50
 process_material = SubResource("ParticleProcessMaterial_owwkg")
 texture = SubResource("CanvasTexture_dcj5d")

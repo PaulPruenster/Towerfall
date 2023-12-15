@@ -22,6 +22,8 @@ var jumping = false
 @export var deathParticle: PackedScene
 @export var arrow: PackedScene
 
+@export var arrow_count = 5
+
 func other_player_on_head():
 	for cast in $Casts.get_children():
 		var ray = cast as RayCast2D
@@ -51,7 +53,6 @@ func _physics_process(delta):
 	
 	if jumping and is_on_floor():
 		$Landing.emitting = true
-	
 	jumping = not is_on_floor()
 
 	# Player wrapping
@@ -69,21 +70,30 @@ func _physics_process(delta):
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_vector(left_button, right_button, up_button, down_button)
-	
 	if direction != Vector2.ZERO:
 		velocity.x = direction.x * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
-
 	move_and_slide()
 	
+	# Shoot arrow
 	if Input.is_action_just_pressed(use_button):
-		print(direction)
-		if direction != Vector2.ZERO:
+		if direction != Vector2.ZERO and arrow_count > 0:
 			var arr = arrow.instantiate() as CharacterBody2D
-			arr.position = position + 30 * sign(direction)
+			arr.position = position + 50 * sign(direction)
 			arr.direction = direction
 			get_parent().add_child(arr)
+			arrow_count -= 1
 
 	if other_player_on_head():
 		set_dead()
+		
+	# Arrow pickup
+	$ArrowCount.text = str(arrow_count)
+	
+	for index in range(get_slide_collision_count()):
+		var collision = get_slide_collision(index).get_collider()
+		if collision.is_in_group("arrow"):
+			arrow_count += 1
+			collision.queue_free()
+			

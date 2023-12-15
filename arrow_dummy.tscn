@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjclelj4uer75"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2g3tr"]
+size = Vector2(8, 8)
+
+[node name="ArrowDummy" type="CharacterBody2D" groups=["arrow"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_2g3tr")
+
+[node name="ColorRect" type="ColorRect" parent="CollisionShape2D"]
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+color = Color(0.733333, 0.2, 1, 1)
