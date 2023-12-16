@@ -1,0 +1,51 @@
+[gd_scene load_steps=2 format=3 uid="uid://bok7qyfo5ubj1"]
+
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_itg5k"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_itg5k")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -113.5
+offset_top = -106.0
+offset_right = 113.5
+offset_bottom = 106.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+text = "Towerfall with wii remotes"
+
+[node name="Level1" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Level 1"
+
+[node name="Level2" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Level 2"
+
+[node name="Level3" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Level 3"
+
+[connection signal="pressed" from="HBoxContainer/Level1" to="." method="_on_level_1_pressed"]
+[connection signal="pressed" from="HBoxContainer/Level2" to="." method="_on_level_2_pressed"]
+[connection signal="pressed" from="HBoxContainer/Level3" to="." method="_on_level_3_pressed"]
