@@ -52,9 +52,9 @@ text = "Towerfall"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Timer" type="Timer" parent="."]
+[node name="RestartTimer" type="Timer" parent="."]
 one_shot = true
 
 [connection signal="im_dead" from="Player1" to="." method="_on_player_1_im_dead"]
 [connection signal="im_dead" from="Player2" to="." method="_on_player_2_im_dead"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="RestartTimer" to="." method="_on_timer_timeout"]

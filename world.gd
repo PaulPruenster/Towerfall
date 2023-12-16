@@ -1,13 +1,16 @@
 extends Node2D
 
+@onready var timer = $RestartTimer
+@onready var status = $Label
+
 func _on_player_1_im_dead():
-	$Label.text = "Player 2 wins!"
-	$Timer.start()
+	status.text = "Player 2 wins!"
+	timer.start()
 
 func _on_player_2_im_dead():
-	$Label.text = "Player 1 wins!"
-	$Timer.start()	
+	status.text = "Player 1 wins!"
+	timer.start()
 
 func _on_timer_timeout():
-	$Label.text = "Towerfall"
+	status.text = "Towerfall"
 	get_tree().reload_current_scene()
