@@ -1,9 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://bjclelj4uer75"]
+[gd_scene load_steps=3 format=3 uid="uid://bjclelj4uer75"]
+
+[ext_resource type="Script" path="res://arrow_dummy.gd" id="1_vapnm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2g3tr"]
 size = Vector2(4, 12)
 
-[node name="ArrowDummy" type="CharacterBody2D" groups=["arrow"]]
+[node name="ArrowDummy" type="Area2D" groups=["arrow"]]
+script = ExtResource("1_vapnm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_2g3tr")
@@ -14,3 +17,5 @@ offset_top = -6.0
 offset_right = 2.0
 offset_bottom = 6.0
 color = Color(0.733333, 0.2, 1, 1)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

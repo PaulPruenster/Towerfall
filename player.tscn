@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://chqr0wbi22ox"]
+[gd_scene load_steps=11 format=3 uid="uid://chqr0wbi22ox"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_dmoi7"]
 [ext_resource type="PackedScene" uid="uid://bgbtxyo02cbx2" path="res://explosion.tscn" id="2_hq8pn"]
@@ -32,6 +32,9 @@ scale_curve = SubResource("CurveTexture_f5t13")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_xtq8u"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cpe45"]
+size = Vector2(21, 2.5)
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_dmoi7")
 deathParticle = ExtResource("2_hq8pn")
@@ -45,20 +48,6 @@ shape = SubResource("RectangleShape2D_v8e8u")
 position = Vector2(-4.76837e-07, 2.14577e-06)
 scale = Vector2(24, 48)
 texture = SubResource("CanvasTexture_21paj")
-
-[node name="Casts" type="Node2D" parent="."]
-
-[node name="HeadCast" type="RayCast2D" parent="Casts"]
-position = Vector2(0, -24)
-target_position = Vector2(0, -11)
-
-[node name="HeadCast2" type="RayCast2D" parent="Casts"]
-position = Vector2(-10, -24)
-target_position = Vector2(0, -9)
-
-[node name="HeadCast3" type="RayCast2D" parent="Casts"]
-position = Vector2(10, -24)
-target_position = Vector2(0, -9)
 
 [node name="Landing" type="GPUParticles2D" parent="."]
 position = Vector2(0, 24)
@@ -80,3 +69,11 @@ theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(0, -26)
+
+[node name="Head" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_cpe45")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

@@ -20,7 +20,6 @@ func _physics_process(delta):
 	
 	var collision_info = move_and_collide(direction.normalized() * delta * speed)
 	if collision_info:
-		queue_free()
 		if collision_info.get_collider().is_in_group("player"):
 			collision_info.get_collider().set_dead()
 		else:
@@ -28,5 +27,6 @@ func _physics_process(delta):
 			dummy.position = position
 			dummy.rotation = atan2(direction.x, -direction.y)
 			get_parent().add_child(dummy)
+		queue_free()
 			
 		

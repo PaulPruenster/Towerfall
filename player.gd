@@ -25,16 +25,6 @@ var aiming = false
 @export var arrow: PackedScene
 
 @export var arrow_count = 5
-
-func other_player_on_head():
-	for cast in $Casts.get_children():
-		var ray = cast as RayCast2D
-		ray.force_raycast_update()
-		if ray.is_colliding() and ray.get_collider().is_in_group("player"):
-			var other_player = ray.get_collider() as CharacterBody2D
-			if other_player.velocity.y > 0:
-				return true
-	return false
 	
 func set_dead():
 	emit_signal("im_dead")
@@ -69,9 +59,6 @@ func _physics_process(delta):
 	# Handle jump
 	if Input.is_action_just_pressed(up_button) and is_on_floor() and not aiming:
 		velocity.y = JUMP_VELOCITY
-		
-	if other_player_on_head():
-		set_dead()
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_vector(left_button, right_button, up_button, down_button)
@@ -96,9 +83,7 @@ func _physics_process(delta):
 		
 	# Arrow pickup
 	$ArrowCount.text = str(arrow_count)
-	for index in range(get_slide_collision_count()):
-		var collision = get_slide_collision(index).get_collider()
-		if collision.is_in_group("arrow"):
-			arrow_count += 1
-			collision.queue_free()
-			
+
+func _on_area_2d_body_entered(body: Node):
+	if body != self and body.is_in_group("player"):
+		set_dead()
