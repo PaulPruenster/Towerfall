@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_itg5k"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("first_focus")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,42 +10,50 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_itg5k")
+first_focus = NodePath("PanelContainer/CenterContainer/VBoxContainer/HBoxContainer2/Level1")
 
-[node name="HBoxContainer" type="VBoxContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -113.5
-offset_top = -106.0
-offset_right = 113.5
-offset_bottom = 106.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="Label" parent="HBoxContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/CenterContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PanelContainer/CenterContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 text = "Towerfall with wii remotes"
 
-[node name="Level1" type="Button" parent="HBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/CenterContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Level1" type="Button" parent="PanelContainer/CenterContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 6
 text = "Level 1"
 
-[node name="Level2" type="Button" parent="HBoxContainer"]
+[node name="Level2" type="Button" parent="PanelContainer/CenterContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 6
 text = "Level 2"
 
-[node name="Level3" type="Button" parent="HBoxContainer"]
+[node name="Level3" type="Button" parent="PanelContainer/CenterContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
-size_flags_vertical = 6
+size_flags_horizontal = 4
 text = "Level 3"
 
-[connection signal="pressed" from="HBoxContainer/Level1" to="." method="_on_level_1_pressed"]
-[connection signal="pressed" from="HBoxContainer/Level2" to="." method="_on_level_2_pressed"]
-[connection signal="pressed" from="HBoxContainer/Level3" to="." method="_on_level_3_pressed"]
+[connection signal="pressed" from="PanelContainer/CenterContainer/VBoxContainer/HBoxContainer2/Level1" to="." method="_on_level_1_pressed"]
+[connection signal="pressed" from="PanelContainer/CenterContainer/VBoxContainer/HBoxContainer2/Level2" to="." method="_on_level_2_pressed"]
+[connection signal="pressed" from="PanelContainer/CenterContainer/VBoxContainer/HBoxContainer2/Level3" to="." method="_on_level_3_pressed"]

@@ -16,7 +16,7 @@ func _physics_process(delta):
 	
 	rotation = atan2(direction.x, -direction.y)
 	
-	direction.y += gravity * delta * 0.001
+	direction.y += gravity * delta * 0.0002
 	
 	var collision_info = move_and_collide(direction.normalized() * delta * speed)
 	if collision_info:

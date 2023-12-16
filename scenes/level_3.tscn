@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://chfb057v602f8"]
+
+[ext_resource type="PackedScene" uid="uid://chqr0wbi22ox" path="res://player.tscn" id="1_4syg6"]
+[ext_resource type="PackedScene" uid="uid://dk0r0yxhkmny4" path="res://floor.tscn" id="2_w72bs"]
+
+[node name="Level3" type="Node2D"]
+
+[node name="Player1" parent="." instance=ExtResource("1_4syg6")]
+position = Vector2(235, 296)
+player_color = Color(0, 1, 0, 1)
+
+[node name="Player2" parent="." instance=ExtResource("1_4syg6")]
+position = Vector2(986, 308)
+player_color = Color(1, 0, 0, 1)
+left_button = "p2_left"
+right_button = "p2_right"
+up_button = "p2_up"
+down_button = "p2_down"
+use_button = "p2_use"
+
+[node name="Floor" parent="." instance=ExtResource("2_w72bs")]
+position = Vector2(217, 378)
+
+[node name="Floor2" parent="." instance=ExtResource("2_w72bs")]
+position = Vector2(916, 386)
+
+[node name="Floor3" parent="." instance=ExtResource("2_w72bs")]
+position = Vector2(574, 636)
+
+[node name="Floor4" parent="." instance=ExtResource("2_w72bs")]
+position = Vector2(571, 133)
