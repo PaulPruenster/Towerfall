@@ -26,6 +26,7 @@ func _physics_process(delta):
 		else:
 			var dummy = arrow_dummy.instantiate()
 			dummy.position = position
+			dummy.rotation = atan2(direction.x, -direction.y)
 			get_parent().add_child(dummy)
 			
 		

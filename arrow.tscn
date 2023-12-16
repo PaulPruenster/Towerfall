@@ -45,6 +45,7 @@ offset_right = 6.0
 offset_bottom = 2.0
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+visible = false
 amount = 50
 process_material = SubResource("ParticleProcessMaterial_owwkg")
 texture = SubResource("CanvasTexture_dcj5d")
