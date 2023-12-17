@@ -35,7 +35,7 @@
  */
 
 #include <stdio.h>                      /* for printf */
-#include "wiiuse.h"                     /* for wiimote_t, classic_ctrl_t, etc */
+#include "src/wiiuse.h"                 /* for wiimote_t, classic_ctrl_t, etc */
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <X11/extensions/XTest.h>
@@ -45,21 +45,6 @@
 #endif
 
 #define MAX_WIIMOTES				4
-
-typedef enum {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    ONE,
-    TWO,
-	A,
-	B,
-	PLUS,
-	MINUS,
-	HOME,
-    NUM_ACTIONS,
-} Action;
 
 Display *display;
 
@@ -73,48 +58,59 @@ Display *display;
 #define IS_DEBUG_MODE (MODE == DEBUG_MODE)
 
 #define MAX_PLAYERS 4
-#define MAX_ACTIONS 11
+#define MAX_BUTTONS 11
 
-// Function to map Wiimote buttons to actions
-Action mapButtonToAction(unsigned short button) {
-    switch (button) {
-        case WIIMOTE_BUTTON_UP:
-            return LEFT;
-        case WIIMOTE_BUTTON_DOWN:
-            return RIGHT;
-        case WIIMOTE_BUTTON_LEFT:
-            return DOWN;
-        case WIIMOTE_BUTTON_RIGHT:
-            return UP;
-        case WIIMOTE_BUTTON_ONE:
-            return ONE;
-        case WIIMOTE_BUTTON_TWO:
-            return TWO;
-		case WIIMOTE_BUTTON_A:
-			return A;
-		case WIIMOTE_BUTTON_B:
-			return B;
-		case WIIMOTE_BUTTON_PLUS:
-			return PLUS;
-		case WIIMOTE_BUTTON_MINUS:
-			return MINUS;
-		case WIIMOTE_BUTTON_HOME:
-			return HOME;
-        default:
-            return NUM_ACTIONS; // Unknown button, return NUM_ACTIONS or handle as needed
-    }
-}
+typedef struct {
+    unsigned short button;
+    const char* actions[MAX_PLAYERS];
+} ButtonMapping;
 
-// Define a 2D array for input mappings
-const char* inputMappings[MAX_PLAYERS][MAX_ACTIONS] = {
-    // {"UP", "DOWN", "LEFT", "RIGHT", "ONE", "TWO", "A", "B", "PLUS", "MINUS", "HOME"}, // Player Example
-    {"w", "s", "a", "d", "1", "f", "3", "4", "5", "6", "7"}, // Player 1
-    {"i", "k", "j", "l", "ö", "p", "y", "x", "c", "v", "b"}, // Player 2
-    {"key7", "key8", "key9", "key10", "key11", "key12"}, // Player 3
-    {"key19", "key20", "key21", "key22", "key23", "key24"}, // Player 4
+const ButtonMapping buttonMappings[MAX_BUTTONS] = {
+    {WIIMOTE_BUTTON_RIGHT, {"w", "i", "key7", "key19"}},
+    {WIIMOTE_BUTTON_LEFT, {"s", "k", "key8", "key20"}},
+    {WIIMOTE_BUTTON_UP, {"a", "j", "key9", "key21"}},
+    {WIIMOTE_BUTTON_DOWN, {"d", "l", "key10", "key22"}},
+    {WIIMOTE_BUTTON_ONE, {"f", "p", "key11", "key23"}},
+    {WIIMOTE_BUTTON_TWO, {"c", "m", "key12", "key24"}},
+    {WIIMOTE_BUTTON_A, {"3", "y", "key13", "key25"}},
+    {WIIMOTE_BUTTON_B, {"4", "x", "key14", "key26"}},
+    {WIIMOTE_BUTTON_PLUS, {"5", "c", "key15", "key27"}},
+    {WIIMOTE_BUTTON_MINUS, {"6", "v", "key16", "key28"}},
+    {WIIMOTE_BUTTON_HOME, {"7", "b", "key17", "key29"}}
 };
 
-void pressKeys(const char *key) {
+#define BUTTON_PRESS_ONCE_COUNT 6
+const unsigned short ButtonPressOnce[BUTTON_PRESS_ONCE_COUNT] = {
+	WIIMOTE_BUTTON_A,
+	WIIMOTE_BUTTON_B,
+	WIIMOTE_BUTTON_PLUS,
+	WIIMOTE_BUTTON_MINUS,
+	WIIMOTE_BUTTON_HOME,
+	WIIMOTE_BUTTON_TWO
+};
+
+#define BUTTON_CONTINUOUS_PRESS_COUNT 5
+const unsigned short ButtonContinuousPress[BUTTON_CONTINUOUS_PRESS_COUNT] = {
+	WIIMOTE_BUTTON_UP,
+	WIIMOTE_BUTTON_DOWN,
+	WIIMOTE_BUTTON_LEFT,
+	WIIMOTE_BUTTON_RIGHT,
+	WIIMOTE_BUTTON_ONE
+};
+
+// Function to get input based on button press and player ID
+const char* getInput(int playerID, unsigned short button) {
+    if (playerID >= 1 && playerID <= MAX_PLAYERS) {
+        for (int i = 0; i < MAX_BUTTONS; ++i) {
+            if (buttonMappings[i].button == button) {
+                return buttonMappings[i].actions[playerID - 1];
+            }
+        }
+    }
+    return "unknown_input";
+}
+
+void pressKey(const char *key) {
 	if (IS_DEBUG_MODE){
 		printf("pressing key: %s\n", key);
 	}
@@ -123,7 +119,7 @@ void pressKeys(const char *key) {
 	XFlush(display);
 }
 
-void releaseKeys(const char *key) {
+void releaseKey(const char *key) {
 	if (IS_DEBUG_MODE){
 		printf("releasing key: %s\n", key);
 	}
@@ -142,14 +138,6 @@ void pressKeyOnce(const char *key) {
 	XFlush(display);
 }
 
-const char* getInput(int playerID, unsigned short input) {
-	Action action = mapButtonToAction(input);
-    // Check bounds to avoid array out-of-bounds access
-    if (playerID >= 1 && playerID <= MAX_PLAYERS && action >= 0 && action < NUM_ACTIONS) {
-        return inputMappings[playerID -1][action];
-    }
-    return "unknown_input";
-}
 
 /**
  *	@brief Callback that handles an event.
@@ -164,263 +152,21 @@ void handle_event(struct wiimote_t* wm) {
 		printf("\n\n--- EVENT [id %i] ---\n", wm->unid);
 	}
 
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_A)) {
-		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_A));
+	for (int i = 0; i < BUTTON_PRESS_ONCE_COUNT; ++i) {
+		if (IS_JUST_PRESSED(wm, ButtonPressOnce[i])) {
+			pressKeyOnce(getInput(wm->unid, ButtonPressOnce[i]));
+		}
 	}
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_B)) {
-		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_B));
-	}
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_UP)) {
-		pressKeys(getInput(wm->unid, WIIMOTE_BUTTON_UP));
-	}
-	else {
-		releaseKeys(getInput(wm->unid, WIIMOTE_BUTTON_UP));
-	}
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_DOWN))	{
-		pressKeys(getInput(wm->unid, WIIMOTE_BUTTON_DOWN));
-	}
-	else {
-		releaseKeys(getInput(wm->unid, WIIMOTE_BUTTON_DOWN));
-	}
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_LEFT))	{
-		pressKeys(getInput(wm->unid, WIIMOTE_BUTTON_LEFT));
-	}
-	else {
-		releaseKeys(getInput(wm->unid, WIIMOTE_BUTTON_LEFT));
-	}
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_RIGHT))	{
-		pressKeys(getInput(wm->unid, WIIMOTE_BUTTON_RIGHT));
-	}
-	else {
-		releaseKeys(getInput(wm->unid, WIIMOTE_BUTTON_RIGHT));
-	}
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_MINUS))	{
-		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_MINUS));
-	}
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_PLUS))	{
-		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_PLUS));
-	}
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_ONE)) {
-		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_ONE));
-	}
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_TWO)) {
-		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_TWO));
-	}
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_HOME))	{
-		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_HOME));
+
+	for (int i = 0; i < BUTTON_CONTINUOUS_PRESS_COUNT; ++i) {
+		if (IS_PRESSED(wm, ButtonContinuousPress[i])) {
+			pressKey(getInput(wm->unid, ButtonContinuousPress[i]));
+		}
+		else {
+			releaseKey(getInput(wm->unid, ButtonContinuousPress[i]));
+		}
 	}
 	return;
-
-	/*
-	 *	Pressing minus will tell the wiimote we are no longer interested in movement.
-	 *	This is useful because it saves battery power.
-	 */
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_MINUS)) {
-		wiiuse_motion_sensing(wm, 0);
-	}
-
-	/*
-	 *	Pressing plus will tell the wiimote we are interested in movement.
-	 */
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_PLUS)) {
-		wiiuse_motion_sensing(wm, 1);
-	}
-
-	/*
-	 *	Pressing B will toggle the rumble
-	 *
-	 *	if B is pressed but is not held, toggle the rumble
-	 */
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_B)) {
-		wiiuse_toggle_rumble(wm);
-	}
-
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_UP)) {
-		wiiuse_set_ir(wm, 1);
-	}
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_DOWN)) {
-		wiiuse_set_ir(wm, 0);
-	}
-
-	/*
-	 * Motion+ support
-	 */
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_ONE)) {
-		if (WIIUSE_USING_EXP(wm)) {
-			wiiuse_set_motion_plus(wm, 2);    // nunchuck pass-through
-		} else {
-			wiiuse_set_motion_plus(wm, 1);    // standalone
-		}
-	}
-
-	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_TWO)) {
-		wiiuse_set_motion_plus(wm, 0); // off
-	}
-
-	/* if the accelerometer is turned on then print angles */
-	if (WIIUSE_USING_ACC(wm)) {
-		printf("wiimote roll  = %f [%f]\n", wm->orient.roll, wm->orient.a_roll);
-		printf("wiimote pitch = %f [%f]\n", wm->orient.pitch, wm->orient.a_pitch);
-		printf("wiimote yaw   = %f\n", wm->orient.yaw);
-	}
-
-	/*
-	 *	If IR tracking is enabled then print the coordinates
-	 *	on the virtual screen that the wiimote is pointing to.
-	 *
-	 *	Also make sure that we see at least 1 dot.
-	 */
-	if (WIIUSE_USING_IR(wm)) {
-		int i = 0;
-
-		/* go through each of the 4 possible IR sources */
-		for (; i < 4; ++i) {
-			/* check if the source is visible */
-			if (wm->ir.dot[i].visible) {
-				printf("IR source %i: (%u, %u)\n", i, wm->ir.dot[i].x, wm->ir.dot[i].y);
-			}
-		}
-
-		printf("IR cursor: (%u, %u)\n", wm->ir.x, wm->ir.y);
-		printf("IR z distance: %f\n", wm->ir.z);
-	}
-
-	/* show events specific to supported expansions */
-	if (wm->exp.type == EXP_NUNCHUK || wm->exp.type == EXP_MOTION_PLUS_NUNCHUK) {
-		/* nunchuk */
-		struct nunchuk_t* nc = (nunchuk_t*)&wm->exp.nunchuk;
-
-		if (IS_PRESSED(nc, NUNCHUK_BUTTON_C)) {
-			printf("Nunchuk: C pressed\n");
-		}
-		if (IS_PRESSED(nc, NUNCHUK_BUTTON_Z)) {
-			printf("Nunchuk: Z pressed\n");
-		}
-
-		printf("nunchuk roll  = %f\n", nc->orient.roll);
-		printf("nunchuk pitch = %f\n", nc->orient.pitch);
-		printf("nunchuk yaw   = %f\n", nc->orient.yaw);
-
-		printf("nunchuk joystick angle:     %f\n", nc->js.ang);
-		printf("nunchuk joystick magnitude: %f\n", nc->js.mag);
-
-		printf("nunchuk joystick vals:      %f, %f\n", nc->js.x, nc->js.y);
-		printf("nunchuk joystick calibration (min, center, max): x: %i, %i, %i  y: %i, %i, %i\n",
-		    nc->js.min.x,
-		    nc->js.center.x,
-		    nc->js.max.x,
-		    nc->js.min.y,
-		    nc->js.center.y,
-		    nc->js.max.y);
-	} else if (wm->exp.type == EXP_CLASSIC) {
-		/* classic controller */
-		struct classic_ctrl_t* cc = (classic_ctrl_t*)&wm->exp.classic;
-
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_ZL)) {
-			printf("Classic: ZL pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_B)) {
-			printf("Classic: B pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_Y)) {
-			printf("Classic: Y pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_A)) {
-			printf("Classic: A pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_X)) {
-			printf("Classic: X pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_ZR)) {
-			printf("Classic: ZR pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_LEFT)) {
-			printf("Classic: LEFT pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_UP)) {
-			printf("Classic: UP pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_RIGHT)) {
-			printf("Classic: RIGHT pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_DOWN)) {
-			printf("Classic: DOWN pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_FULL_L)) {
-			printf("Classic: FULL L pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_MINUS)) {
-			printf("Classic: MINUS pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_HOME)) {
-			printf("Classic: HOME pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_PLUS)) {
-			printf("Classic: PLUS pressed\n");
-		}
-		if (IS_PRESSED(cc, CLASSIC_CTRL_BUTTON_FULL_R)) {
-			printf("Classic: FULL R pressed\n");
-		}
-
-		printf("classic L button pressed:         %f\n", cc->l_shoulder);
-		printf("classic R button pressed:         %f\n", cc->r_shoulder);
-		printf("classic left joystick angle:      %f\n", cc->ljs.ang);
-		printf("classic left joystick magnitude:  %f\n", cc->ljs.mag);
-		printf("classic right joystick angle:     %f\n", cc->rjs.ang);
-		printf("classic right joystick magnitude: %f\n", cc->rjs.mag);
-	} else if (wm->exp.type == EXP_GUITAR_HERO_3) {
-		/* guitar hero 3 guitar */
-		struct guitar_hero_3_t* gh3 = (guitar_hero_3_t*)&wm->exp.gh3;
-
-		if (IS_PRESSED(gh3, GUITAR_HERO_3_BUTTON_STRUM_UP)) {
-			printf("Guitar: Strum Up pressed\n");
-		}
-		if (IS_PRESSED(gh3, GUITAR_HERO_3_BUTTON_STRUM_DOWN))	{
-			printf("Guitar: Strum Down pressed\n");
-		}
-		if (IS_PRESSED(gh3, GUITAR_HERO_3_BUTTON_YELLOW)) {
-			printf("Guitar: Yellow pressed\n");
-		}
-		if (IS_PRESSED(gh3, GUITAR_HERO_3_BUTTON_GREEN)) {
-			printf("Guitar: Green pressed\n");
-		}
-		if (IS_PRESSED(gh3, GUITAR_HERO_3_BUTTON_BLUE)) {
-			printf("Guitar: Blue pressed\n");
-		}
-		if (IS_PRESSED(gh3, GUITAR_HERO_3_BUTTON_RED)) {
-			printf("Guitar: Red pressed\n");
-		}
-		if (IS_PRESSED(gh3, GUITAR_HERO_3_BUTTON_ORANGE)) {
-			printf("Guitar: Orange pressed\n");
-		}
-		if (IS_PRESSED(gh3, GUITAR_HERO_3_BUTTON_PLUS)) {
-			printf("Guitar: Plus pressed\n");
-		}
-		if (IS_PRESSED(gh3, GUITAR_HERO_3_BUTTON_MINUS)) {
-			printf("Guitar: Minus pressed\n");
-		}
-
-		printf("Guitar whammy bar:          %f\n", gh3->whammy_bar);
-		printf("Guitar joystick angle:      %f\n", gh3->js.ang);
-		printf("Guitar joystick magnitude:  %f\n", gh3->js.mag);
-	} else if (wm->exp.type == EXP_WII_BOARD) {
-		/* wii balance board */
-		struct wii_board_t* wb = (wii_board_t*)&wm->exp.wb;
-		float total = wb->tl + wb->tr + wb->bl + wb->br;
-		float x = ((wb->tr + wb->br) / total) * 2 - 1;
-		float y = ((wb->tl + wb->tr) / total) * 2 - 1;
-		printf("Weight: %f kg @ (%f, %f)\n", total, x, y);
-		printf("Interpolated weight: TL:%f  TR:%f  BL:%f  BR:%f\n", wb->tl, wb->tr, wb->bl, wb->br);
-		printf("Raw: TL:%d  TR:%d  BL:%d  BR:%d\n", wb->rtl, wb->rtr, wb->rbl, wb->rbr); 
-	}
-
-	if (wm->exp.type == EXP_MOTION_PLUS ||
-	        wm->exp.type == EXP_MOTION_PLUS_NUNCHUK) {
-		printf("Motion+ angular rates (deg/sec): pitch:%03.2f roll:%03.2f yaw:%03.2f\n",
-		       wm->exp.mp.angle_rate_gyro.pitch,
-		       wm->exp.mp.angle_rate_gyro.roll,
-		       wm->exp.mp.angle_rate_gyro.yaw);
-	}
 }
 
 /**

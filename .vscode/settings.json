@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.rmd": "markdown",
+        "wiiuse.h": "c",
+        "wiiuse_internal.h": "c"
+    }
+}
