@@ -12,3 +12,6 @@ $(TARGET): $(SRC)
 
 clean:
 	rm -f $(TARGET)
+
+wii_prod: $(SRC)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) -D MODE=PRODUCTION_MODE

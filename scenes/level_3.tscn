@@ -17,6 +17,7 @@ right_button = "p2_right"
 up_button = "p2_up"
 down_button = "p2_down"
 use_button = "p2_use"
+jump_button = "p2_jump"
 
 [node name="Floor" parent="." instance=ExtResource("2_w72bs")]
 position = Vector2(217, 378)

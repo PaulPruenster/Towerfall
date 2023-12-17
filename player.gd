@@ -20,6 +20,7 @@ var aiming = false
 @export var up_button = "p1_up"
 @export var down_button = "p1_down"
 @export var use_button = "p1_use"
+@export var jump_button = "p1_jump"
 
 @export var deathParticle: PackedScene
 @export var arrow: PackedScene
@@ -41,6 +42,7 @@ func _physics_process(delta):
 		velocity.y += gravity * delta
 		
 	aiming = Input.is_action_pressed(use_button)
+		
 	$Sprite2D.modulate = player_color
 		
 	if jumping and is_on_floor():
@@ -57,7 +59,7 @@ func _physics_process(delta):
 	if position.x < 0: position.x = width
 
 	# Handle jump
-	if Input.is_action_just_pressed(up_button) and is_on_floor() and not aiming:
+	if Input.is_action_just_pressed(jump_button) and is_on_floor() and not aiming:
 		velocity.y = JUMP_VELOCITY
 
 	# Get the input direction and handle the movement/deceleration.
@@ -80,6 +82,7 @@ func _physics_process(delta):
 			arr.direction = direction
 			get_parent().add_child(arr)
 			arrow_count -= 1
+		aiming = false
 		
 	# Arrow pickup
 	$ArrowCount.text = str(arrow_count)
