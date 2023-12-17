@@ -82,7 +82,6 @@ func _physics_process(delta):
 			arr.direction = direction
 			get_parent().add_child(arr)
 			arrow_count -= 1
-		aiming = false
 		
 	# Arrow pickup
 	$ArrowCount.text = str(arrow_count)

@@ -35,7 +35,7 @@
  */
 
 #include <stdio.h>                      /* for printf */
-#include "wiiuse.h"                     /* for wiimote_t, classic_ctrl_t, etc */
+#include "src/wiiuse.h"                 /* for wiimote_t, classic_ctrl_t, etc */
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <X11/extensions/XTest.h>
