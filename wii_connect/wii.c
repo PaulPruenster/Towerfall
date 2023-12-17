@@ -47,35 +47,59 @@
 #define MAX_WIIMOTES				4
 
 typedef enum {
-    RIGHT,
-    LEFT,
     UP,
     DOWN,
+    LEFT,
+    RIGHT,
     ONE,
     TWO,
-    NUM_ACTIONS
+	A,
+	B,
+	PLUS,
+	MINUS,
+	HOME,
+    NUM_ACTIONS,
 } Action;
 
 Display *display;
 
+#define PRODUCTION_MODE 0
+#define DEBUG_MODE 1
+
+#ifndef MODE
+	#define MODE DEBUG_MODE
+#endif
+
+#define IS_DEBUG_MODE (MODE == DEBUG_MODE)
+
 #define MAX_PLAYERS 4
-#define MAX_ACTIONS 6
+#define MAX_ACTIONS 11
 
 // Function to map Wiimote buttons to actions
 Action mapButtonToAction(unsigned short button) {
     switch (button) {
         case WIIMOTE_BUTTON_UP:
-            return UP;
-        case WIIMOTE_BUTTON_DOWN:
-            return DOWN;
-        case WIIMOTE_BUTTON_LEFT:
             return LEFT;
-        case WIIMOTE_BUTTON_RIGHT:
+        case WIIMOTE_BUTTON_DOWN:
             return RIGHT;
+        case WIIMOTE_BUTTON_LEFT:
+            return DOWN;
+        case WIIMOTE_BUTTON_RIGHT:
+            return UP;
         case WIIMOTE_BUTTON_ONE:
             return ONE;
         case WIIMOTE_BUTTON_TWO:
             return TWO;
+		case WIIMOTE_BUTTON_A:
+			return A;
+		case WIIMOTE_BUTTON_B:
+			return B;
+		case WIIMOTE_BUTTON_PLUS:
+			return PLUS;
+		case WIIMOTE_BUTTON_MINUS:
+			return MINUS;
+		case WIIMOTE_BUTTON_HOME:
+			return HOME;
         default:
             return NUM_ACTIONS; // Unknown button, return NUM_ACTIONS or handle as needed
     }
@@ -83,31 +107,36 @@ Action mapButtonToAction(unsigned short button) {
 
 // Define a 2D array for input mappings
 const char* inputMappings[MAX_PLAYERS][MAX_ACTIONS] = {
-    {"w", "s", "a", "d", "1", "f"}, // Player 1
-    {"i", "k", "j", "l", "ö", "p"}, // Player 2
+    // {"UP", "DOWN", "LEFT", "RIGHT", "ONE", "TWO", "A", "B", "PLUS", "MINUS", "HOME"}, // Player Example
+    {"w", "s", "a", "d", "1", "f", "3", "4", "5", "6", "7"}, // Player 1
+    {"i", "k", "j", "l", "ö", "p", "y", "x", "c", "v", "b"}, // Player 2
     {"key7", "key8", "key9", "key10", "key11", "key12"}, // Player 3
     {"key19", "key20", "key21", "key22", "key23", "key24"}, // Player 4
 };
 
 void pressKeys(const char *key) {
-	printf("key: %s\n", key);
-	KeyCode keycode;
-	keycode = XKeysymToKeycode(display, XStringToKeysym(key));
-	printf("keycode: %d\n", keycode);
+	if (IS_DEBUG_MODE){
+		printf("pressing key: %s\n", key);
+	}
+	KeyCode keycode = XKeysymToKeycode(display, XStringToKeysym(key));
  	XTestFakeKeyEvent(display, keycode, True, 0);
 	XFlush(display);
 }
 
 void releaseKeys(const char *key) {
-	KeyCode keycode;
-	keycode = XKeysymToKeycode(display, XStringToKeysym(key));
+	if (IS_DEBUG_MODE){
+		printf("releasing key: %s\n", key);
+	}
+	KeyCode keycode = XKeysymToKeycode(display, XStringToKeysym(key));
  	XTestFakeKeyEvent(display, keycode, False, 0);
 	XFlush(display);
 }
 
 void pressKeyOnce(const char *key) {
-	KeyCode keycode;
-	keycode = XKeysymToKeycode(display, XStringToKeysym(key));
+	if (IS_DEBUG_MODE){
+		printf("pressing key once: %s\n", key);
+	}
+	KeyCode keycode = XKeysymToKeycode(display, XStringToKeysym(key));
  	XTestFakeKeyEvent(display, keycode, True, 0);
 	XTestFakeKeyEvent(display, keycode, False, 0);
 	XFlush(display);
@@ -131,63 +160,54 @@ const char* getInput(int playerID, unsigned short input) {
  *	event occurs on the specified wiimote.
  */
 void handle_event(struct wiimote_t* wm) {
-	printf("\n\n--- EVENT [id %i] ---\n", wm->unid);
-
-
-	printf("event: %d\n", wm->event);
-	/* if a button is pressed, report it */
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_A)) {
-		printf("A pressed\n");
+	if (IS_DEBUG_MODE){
+		printf("\n\n--- EVENT [id %i] ---\n", wm->unid);
 	}
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_B)) {
-		printf("B pressed\n");
+
+	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_A)) {
+		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_A));
+	}
+	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_B)) {
+		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_B));
 	}
 	if (IS_PRESSED(wm, WIIMOTE_BUTTON_UP)) {
 		pressKeys(getInput(wm->unid, WIIMOTE_BUTTON_UP));
-		printf("UP pressed\n");
 	}
 	else {
 		releaseKeys(getInput(wm->unid, WIIMOTE_BUTTON_UP));
 	}
 	if (IS_PRESSED(wm, WIIMOTE_BUTTON_DOWN))	{
 		pressKeys(getInput(wm->unid, WIIMOTE_BUTTON_DOWN));
-		printf("DOWN pressed\n");
 	}
 	else {
 		releaseKeys(getInput(wm->unid, WIIMOTE_BUTTON_DOWN));
 	}
 	if (IS_PRESSED(wm, WIIMOTE_BUTTON_LEFT))	{
 		pressKeys(getInput(wm->unid, WIIMOTE_BUTTON_LEFT));
-		printf("LEFT pressed\n");
 	}
 	else {
 		releaseKeys(getInput(wm->unid, WIIMOTE_BUTTON_LEFT));
 	}
 	if (IS_PRESSED(wm, WIIMOTE_BUTTON_RIGHT))	{
 		pressKeys(getInput(wm->unid, WIIMOTE_BUTTON_RIGHT));
-		printf("RIGHT pressed\n");
 	}
 	else {
 		releaseKeys(getInput(wm->unid, WIIMOTE_BUTTON_RIGHT));
 	}
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_MINUS))	{
-		printf("MINUS pressed\n");
+	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_MINUS))	{
+		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_MINUS));
 	}
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_PLUS))	{
-		printf("PLUS pressed\n");
+	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_PLUS))	{
+		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_PLUS));
 	}
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_ONE)) {
-		printf("ONE pressed\n");
-	}
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_TWO)) {
-		printf("TWO pressed\n");
-	}
-	if (IS_PRESSED(wm, WIIMOTE_BUTTON_HOME))	{
-		printf("HOME pressed\n");
+	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_ONE)) {
+		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_ONE));
 	}
 	if (IS_JUST_PRESSED(wm, WIIMOTE_BUTTON_TWO)) {
 		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_TWO));
-		printf("A just pressed\n");
+	}
+	if (IS_PRESSED(wm, WIIMOTE_BUTTON_HOME))	{
+		pressKeyOnce(getInput(wm->unid, WIIMOTE_BUTTON_HOME));
 	}
 	return;
 
