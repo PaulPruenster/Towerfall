@@ -1,6 +1,9 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99
-LDFLAGS = -lwiiuse -lm -lbluetooth -lX11 -lXtst
+CFLAGS = -Wall -Wextra -std=c99 
+LDFLAGS = -I./include
+LDFLAGS += -L./lib
+LDFLAGS += -lwiiuse
+LDFLAGS += -lm -lbluetooth -lX11 -lXtst 
 
 TARGET = wii
 SRC = wii.c
