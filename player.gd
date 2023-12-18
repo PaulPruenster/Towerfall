@@ -25,11 +25,17 @@ var aiming = false
 @export var deathParticle: PackedScene
 @export var arrow: PackedScene
 
+@export var health = 1
 @export var arrow_count = 5
 
 var current_arrow: CharacterBody2D
 	
-func set_dead():
+func hurt():
+	if health > 1:
+		health -= 1
+		return
+
+	# Die a death of dead
 	emit_signal("im_dead")
 	
 	if current_arrow:
@@ -112,4 +118,4 @@ func _physics_process(delta):
 
 func _on_area_2d_body_entered(body: Node):
 	if body != self and body.is_in_group("player"):
-		set_dead()
+		hurt()

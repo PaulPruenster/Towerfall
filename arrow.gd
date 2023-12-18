@@ -34,7 +34,7 @@ func _physics_process(delta):
 	var collision_info = move_and_collide(direction.normalized() * delta * speed)
 	if collision_info:
 		if collision_info.get_collider().is_in_group("player"):
-			collision_info.get_collider().set_dead()
+			collision_info.get_collider().hurt()
 		else:
 			var dummy = arrow_dummy.instantiate()
 			dummy.position = position
