@@ -26,6 +26,8 @@ var aiming = false
 @export var arrow: PackedScene
 
 @export var arrow_count = 5
+
+var current_arrow: CharacterBody2D
 	
 func set_dead():
 	emit_signal("im_dead")
@@ -35,6 +37,11 @@ func set_dead():
 	par.position = position
 	get_tree().current_scene.add_child(par)
 	queue_free()
+	
+func can_shoot(direction: Vector2):
+	if direction.y > 0 and is_on_floor():
+		return false
+	return direction != Vector2.ZERO and arrow_count > 0
 
 func _physics_process(delta):
 	# Add the gravity
@@ -73,15 +80,29 @@ func _physics_process(delta):
 	if aiming and direction != Vector2.ZERO:
 		$Sprite2D.modulate = aim_color
 
-	# Shoot arrow
-	if Input.is_action_just_released(use_button):
-		if direction != Vector2.ZERO and arrow_count > 0:
-			var arr = arrow.instantiate() as CharacterBody2D
-			arr.position.x = position.x + 20 * sign(direction.x)
-			arr.position.y = position.y + 40 * sign(direction.y)
-			arr.direction = direction
-			get_parent().add_child(arr)
+	if Input.is_action_pressed(use_button):
+		if can_shoot(direction):
+			# spawn arrow
+			if not current_arrow:
+				current_arrow = arrow.instantiate() as CharacterBody2D
+				get_parent().add_child(current_arrow)
+			# update arrow position and rotation
+			current_arrow.position.x = position.x + 20 * sign(direction.x)
+			current_arrow.position.y = position.y + 40 * sign(direction.y)
+			current_arrow.direction = direction
+		elif current_arrow:
+			# delete arrow
+			current_arrow.queue_free()
+			current_arrow = null
+
+	if current_arrow and Input.is_action_just_released(use_button):
+		if can_shoot(direction):
+			current_arrow.shoot()
 			arrow_count -= 1
+		else:
+			current_arrow.queue_free()
+		current_arrow = null
+			
 		
 	# Arrow pickup
 	$ArrowCount.text = str(arrow_count)
