@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 
-LDFLAGS = -I$(shell pwd)/include
-LDFLAGS += -L$(shell pwd)/lib
+LDFLAGS = -I./include
+LDFLAGS += -L./lib
 LDFLAGS += -lwiiuse
 LDFLAGS += -lm -lbluetooth -lX11 -lXtst 
 
