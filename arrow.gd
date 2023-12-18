@@ -4,6 +4,7 @@ extends CharacterBody2D
 @export var speed = 1000
 
 @onready var trail_particles = $GPUParticles2D
+@onready var collision = $CollisionShape2D
 
 const arrow_dummy = preload("res://arrow_dummy.tscn")
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -13,6 +14,7 @@ var active = false
 func shoot():
 	active = true
 	trail_particles.show()
+	collision.disabled = false
 	
 func _physics_process(delta):
 	rotation = atan2(direction.x, -direction.y)

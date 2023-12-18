@@ -32,10 +32,14 @@ var current_arrow: CharacterBody2D
 func set_dead():
 	emit_signal("im_dead")
 	
+	if current_arrow:
+		current_arrow.queue_free()
+	
 	var par = deathParticle.instantiate()
 	par.emitting = true
 	par.position = position
 	get_tree().current_scene.add_child(par)
+	
 	queue_free()
 	
 func can_shoot(direction: Vector2):
@@ -77,10 +81,9 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	move_and_slide()
 	
-	if aiming and direction != Vector2.ZERO:
+	if aiming:
 		$Sprite2D.modulate = aim_color
-
-	if Input.is_action_pressed(use_button):
+		
 		if can_shoot(direction):
 			# spawn arrow
 			if not current_arrow:

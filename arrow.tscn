@@ -37,6 +37,7 @@ script = ExtResource("1_qpdqc")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_2pt5r")
+disabled = true
 
 [node name="ColorRect" type="ColorRect" parent="CollisionShape2D"]
 offset_left = -6.0
