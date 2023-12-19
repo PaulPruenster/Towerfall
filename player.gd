@@ -25,7 +25,7 @@ var aiming = false
 @export var deathParticle: PackedScene
 @export var arrow: PackedScene
 
-@export var health = 1
+@export var health = 2
 @export var arrow_count = 5
 
 var current_arrow: CharacterBody2D
@@ -112,9 +112,9 @@ func _physics_process(delta):
 			current_arrow.queue_free()
 		current_arrow = null
 			
-		
-	# Arrow pickup
+
 	$ArrowCount.text = str(arrow_count)
+	$HealthCount.text = str(health)
 
 func _on_area_2d_body_entered(body: Node):
 	if body != self and body.is_in_group("player"):

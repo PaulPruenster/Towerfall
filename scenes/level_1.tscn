@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://di33lnkqlrrls"]
+[gd_scene load_steps=5 format=3 uid="uid://di33lnkqlrrls"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_fpjbi"]
 [ext_resource type="PackedScene" uid="uid://chqr0wbi22ox" path="res://player.tscn" id="2_tlu43"]
 [ext_resource type="PackedScene" uid="uid://dk0r0yxhkmny4" path="res://floor.tscn" id="3_aow58"]
+[ext_resource type="PackedScene" uid="uid://bbofq3diudthx" path="res://chest.tscn" id="4_bqqp5"]
 
 [node name="level1" type="Node2D"]
 script = ExtResource("1_fpjbi")
@@ -48,6 +49,12 @@ theme_override_font_sizes/font_size = 30
 text = "Towerfall"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Chest" parent="." instance=ExtResource("4_bqqp5")]
+position = Vector2(547, 131)
+
+[node name="Chest2" parent="." instance=ExtResource("4_bqqp5")]
+position = Vector2(949, 290)
 
 [connection signal="im_dead" from="Player1" to="." method="_on_player_1_im_dead"]
 [connection signal="im_dead" from="Player2" to="." method="_on_player_2_im_dead"]
