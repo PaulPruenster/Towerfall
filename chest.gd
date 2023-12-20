@@ -14,7 +14,7 @@ func _ready():
 	set_lootable(true)
 	timer.wait_time = timer_length
 	
-func _physics_process(delta):
+func _physics_process(_delta):
 	progress.value = (timer_length - timer.time_left)/timer_length * 100
 
 func set_lootable(new_val: bool):

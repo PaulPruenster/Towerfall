@@ -12,6 +12,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var jumping = false
 var aiming = false
+var crouching = false
 
 @export_color_no_alpha var player_color
 @export_color_no_alpha var aim_color = Color("#FFF")
@@ -52,13 +53,24 @@ func can_shoot(direction: Vector2):
 	if direction.y > 0 and is_on_floor():
 		return false
 	return direction != Vector2.ZERO and arrow_count > 0
+	
+func set_crouching(crouching_val: bool):
+	if crouching != crouching_val:
+		$Body.scale.y *= 0.5 if crouching_val else 2.0
+		$Sprite2D.scale.y *= 0.5 if crouching_val else 2.0
+		crouching = crouching_val
 
 func _physics_process(delta):
 	# Add the gravity
 	if not is_on_floor() and velocity.y < TERMINAL_VELOCITY:
-		velocity.y += gravity * delta
+		if crouching:
+			velocity.y += 2 * gravity * delta
+		else:
+			velocity.y += gravity * delta
 		
 	aiming = Input.is_action_pressed(use_button)
+	if Input.is_action_just_pressed(use_button):
+		set_crouching(false)
 		
 	$Sprite2D.modulate = player_color
 		
@@ -83,10 +95,19 @@ func _physics_process(delta):
 	var direction = Input.get_vector(left_button, right_button, up_button, down_button)
 	if direction != Vector2.ZERO and not aiming:
 		velocity.x = direction.x * SPEED
+		
+
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	move_and_slide()
 	
+	# Crouch
+	if not aiming and Input.is_action_just_pressed(down_button):
+		set_crouching(true)
+	if  Input.is_action_just_released(down_button):
+		set_crouching(false)
+	
+	# Aim and shoot (np hard)
 	if aiming:
 		$Sprite2D.modulate = aim_color
 		
@@ -102,7 +123,7 @@ func _physics_process(delta):
 		elif current_arrow:
 			# delete arrow
 			current_arrow.queue_free()
-			current_arrow = null
+			current_arrow =null
 
 	if current_arrow and Input.is_action_just_released(use_button):
 		if can_shoot(direction):
