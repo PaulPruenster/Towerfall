@@ -1,22 +1,32 @@
 extends Area2D
 
 @export_color_no_alpha var color
-@export var timer_lenght = 10
+@export var timer_length = 5
+
+@onready var sprite = $Sprite2D
+@onready var timer = $Regeneration
+@onready var particles = $Recharged
+@onready var progress = $ProgressBar
 
 var lootable = true
 
 func _ready():
 	set_lootable(true)
-	$Regeneration.wait_time = timer_lenght
+	timer.wait_time = timer_length
 	
+func _physics_process(delta):
+	progress.value = (timer_length - timer.time_left)/timer_length * 100
+
 func set_lootable(new_val: bool):
 	lootable = new_val
 	if new_val:
-		$Sprite2D.modulate = color
-		$Recharged.emitting = true
+		sprite.modulate = color
+		particles.emitting = true
+		progress.hide()
 	else:
-		$Sprite2D.modulate = Color(color, 0.5)
-		$Regeneration.start()
+		sprite.modulate = Color(color, 0.5)
+		timer.start()
+		progress.show()
 	
 func apply_effect(player: CharacterBody2D):
 	if player.arrow_count < 5:

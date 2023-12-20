@@ -52,5 +52,13 @@ lifetime = 0.6
 one_shot = true
 preprocess = 0.5
 
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = -10.0
+offset_top = -4.0
+offset_right = 10.0
+offset_bottom = 4.0
+value = 50.0
+show_percentage = false
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="Regeneration" to="." method="_on_regeneration_timeout"]
