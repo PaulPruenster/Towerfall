@@ -1,10 +1,9 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 
-LDFLAGS = -I./include
-LDFLAGS += -L./lib
+CFLAGS = -Wall -Wextra -std=c99
+#LDFLAGS = -I./include
+LDFLAGS += -L./lib -Wl,-rpath=./lib
 LDFLAGS += -lwiiuse
-LDFLAGS += -lm -lbluetooth -lX11 -lXtst 
-
+LDFLAGS += -lm -lbluetooth -lX11 -lXtst
 TARGET = wii
 SRC = wii.c
 
@@ -17,4 +16,7 @@ clean:
 	rm -f $(TARGET)
 
 wii_prod: $(SRC)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) -D MODE=PRODUCTION_MODE
+	$(CC) $(CFLAGS) -S $^ $(LDFLAGS) -D MODE=PRODUCTION_MODE
+
+wii_cpp: wii.cpp
+	$(CC) $(CFLAGS)  -o $@ $^ $(LDFLAGS) -lstdc++

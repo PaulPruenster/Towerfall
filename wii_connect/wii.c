@@ -35,7 +35,7 @@
  */
 
 #include <stdio.h>                      /* for printf */
-#include "wiiuse.h"                 /* for wiimote_t, classic_ctrl_t, etc */
+#include "include/wiiuse.h"                 /* for wiimote_t, classic_ctrl_t, etc */
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <X11/extensions/XTest.h>
@@ -262,14 +262,7 @@ short any_wiimote_connected(wiimote** wm, int wiimotes) {
 	return 0;
 }
 
-
-/**
- *	@brief main()
- *
- *	Connect to up to two wiimotes and print any events
- *	that occur on either device.
- */
-int main(int argc, char** argv) {
+int start_connection() {
 	display = XOpenDisplay(NULL);
 
 	wiimote** wiimotes;
@@ -373,6 +366,7 @@ int main(int argc, char** argv) {
 			 *	So go through each one and check if anything happened.
 			 */
 			int i = 0;
+			printf("\n\n--- POLLING [wiimotes %i] ---\n", connected);
 			for (; i < MAX_WIIMOTES; ++i) {
 				switch (wiimotes[i]->event) {
 					case WIIUSE_EVENT:
@@ -452,4 +446,14 @@ int main(int argc, char** argv) {
 	wiiuse_cleanup(wiimotes, MAX_WIIMOTES);
 
 	return 0;
+}
+
+/**
+ *	@brief main()
+ *
+ *	Connect to up to two wiimotes and print any events
+ *	that occur on either device.
+ */
+int main(int argc, char** argv) {
+	return start_connection();
 }
