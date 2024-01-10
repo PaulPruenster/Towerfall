@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://di33lnkqlrrls"]
+[gd_scene load_steps=9 format=3 uid="uid://di33lnkqlrrls"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_fpjbi"]
 [ext_resource type="PackedScene" uid="uid://chqr0wbi22ox" path="res://player.tscn" id="2_tlu43"]
 [ext_resource type="PackedScene" uid="uid://bbofq3diudthx" path="res://chest.tscn" id="4_bqqp5"]
 [ext_resource type="Texture2D" uid="uid://ds5248vc8ybyt" path="res://assets/Tile Map 1.png" id="5_nav4k"]
 [ext_resource type="PackedScene" uid="uid://bbk4lwhcjndsp" path="res://jumping_pad.tscn" id="5_rf4fh"]
+[ext_resource type="PackedScene" uid="uid://1yjfjra6ueef" path="res://gate.tscn" id="6_qvgqh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dxapi"]
 texture = ExtResource("5_nav4k")
@@ -173,6 +174,14 @@ layer_0/tile_data = PackedInt32Array(720896, 0, 3, 1179667, 0, 3, 589851, 0, 3, 
 
 [node name="JumpingPad" parent="." instance=ExtResource("5_rf4fh")]
 position = Vector2(778, 576)
+
+[node name="Gate" parent="." instance=ExtResource("6_qvgqh")]
+position = Vector2(605, 75)
+target_node = NodePath("../Gate2")
+
+[node name="Gate2" parent="." instance=ExtResource("6_qvgqh")]
+position = Vector2(443, 523)
+target_node = NodePath("../Gate")
 
 [connection signal="im_dead" from="Player1" to="." method="_on_player_1_im_dead"]
 [connection signal="im_dead" from="Player2" to="." method="_on_player_2_im_dead"]
