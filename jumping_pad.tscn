@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bbk4lwhcjndsp"]
+[gd_scene load_steps=6 format=3 uid="uid://cv2w1s3culsv5"]
 
 [ext_resource type="Script" path="res://jumping_pad.gd" id="1_srwv1"]
 
@@ -40,7 +40,6 @@ texture = SubResource("CanvasTexture_a4hhw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Base/StaticBody2D"]
 position = Vector2(5.02169e-07, 8.9407e-08)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_8c4rc")
 
 [connection signal="body_entered" from="Pad/Area2D" to="." method="_on_area_2d_body_entered"]
