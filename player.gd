@@ -4,7 +4,7 @@ extends CharacterBody2D
 const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
 const TERMINAL_VELOCITY = 1000
-const DASH_VELOCITY = 800
+const DASH_VELOCITY = 700
 
 signal im_dead
 
@@ -57,7 +57,7 @@ func can_shoot(direction: Vector2):
 
 func _physics_process(delta):
 	# Add the gravity
-	if not is_on_floor() and velocity.y < TERMINAL_VELOCITY:
+	if not is_on_floor() and not dashing and velocity.y < TERMINAL_VELOCITY:
 		velocity.y += gravity * delta
 		
 	aiming = Input.is_action_pressed(use_button)

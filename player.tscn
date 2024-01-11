@@ -89,7 +89,7 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="DashTimer" type="Timer" parent="."]
-wait_time = 0.1
+wait_time = 0.15
 one_shot = true
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
