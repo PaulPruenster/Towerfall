@@ -40,10 +40,12 @@
 #include <X11/keysym.h>
 #include <X11/extensions/XTest.h>
 #include <X11/keysymdef.h>
+#include <stdbool.h>
+#include <cjson/cJSON.h>
+
 #ifndef WIIUSE_WIN32
 #include <unistd.h>                     /* for usleep */
 #endif
-
 #define MAX_WIIMOTES				4
 
 Display *display;
@@ -63,42 +65,140 @@ Display *display;
 typedef struct {
     unsigned short button;
     const char* actions[MAX_PLAYERS];
+	bool continuous;
 } ButtonMapping;
 
-const ButtonMapping buttonMappings[MAX_BUTTONS] = {
-    {WIIMOTE_BUTTON_RIGHT, {"w", "i", "key7", "key19"}},
-    {WIIMOTE_BUTTON_LEFT, {"s", "k", "key8", "key20"}},
-    {WIIMOTE_BUTTON_UP, {"a", "j", "key9", "key21"}},
-    {WIIMOTE_BUTTON_DOWN, {"d", "l", "key10", "key22"}},
-    {WIIMOTE_BUTTON_ONE, {"f", "p", "key11", "key23"}},
-    {WIIMOTE_BUTTON_TWO, {"c", "m", "key12", "key24"}},
-    {WIIMOTE_BUTTON_A, {"3", "y", "key13", "key25"}},
-    {WIIMOTE_BUTTON_B, {"4", "x", "key14", "key26"}},
-    {WIIMOTE_BUTTON_PLUS, {"5", "c", "key15", "key27"}},
-    {WIIMOTE_BUTTON_MINUS, {"6", "v", "key16", "key28"}},
-    {WIIMOTE_BUTTON_HOME, {"7", "b", "key17", "key29"}}
-};
+ButtonMapping buttonMappings[MAX_BUTTONS] = {};
 
-#define BUTTON_PRESS_ONCE_COUNT 6
-const unsigned short ButtonPressOnce[BUTTON_PRESS_ONCE_COUNT] = {
-	WIIMOTE_BUTTON_A,
-	WIIMOTE_BUTTON_B,
-	WIIMOTE_BUTTON_PLUS,
-	WIIMOTE_BUTTON_MINUS,
-	WIIMOTE_BUTTON_HOME,
-	WIIMOTE_BUTTON_TWO
-};
 
-#define BUTTON_CONTINUOUS_PRESS_COUNT 5
-const unsigned short ButtonContinuousPress[BUTTON_CONTINUOUS_PRESS_COUNT] = {
-	WIIMOTE_BUTTON_UP,
-	WIIMOTE_BUTTON_DOWN,
-	WIIMOTE_BUTTON_LEFT,
-	WIIMOTE_BUTTON_RIGHT,
-	WIIMOTE_BUTTON_ONE
-};
+/**
+ * Returns the macro for the given button string.
+ * 
+ * @param str The button string.
+ * @return The macro for the given button string.
+ */
+short int get_macro_from_string(char *str) {
+	if (strcmp(str, "WIIMOTE_BUTTON_RIGHT") == 0) {
+		return WIIMOTE_BUTTON_RIGHT;
+	}
+	else if (strcmp(str, "WIIMOTE_BUTTON_LEFT") == 0) {
+		return WIIMOTE_BUTTON_LEFT;
+	}
+	else if (strcmp(str, "WIIMOTE_BUTTON_UP") == 0) {
+		return WIIMOTE_BUTTON_UP;
+	}
+	else if (strcmp(str, "WIIMOTE_BUTTON_DOWN") == 0) {
+		return WIIMOTE_BUTTON_DOWN;
+	}
+	else if (strcmp(str, "WIIMOTE_BUTTON_ONE") == 0) {
+		return WIIMOTE_BUTTON_ONE;
+	}
+	else if (strcmp(str, "WIIMOTE_BUTTON_TWO") == 0) {
+		return WIIMOTE_BUTTON_TWO;
+	}
+	else if (strcmp(str, "WIIMOTE_BUTTON_A") == 0) {
+		return WIIMOTE_BUTTON_A;
+	}
+	else if (strcmp(str, "WIIMOTE_BUTTON_B") == 0) {
+		return WIIMOTE_BUTTON_B;
+	}
+	else if (strcmp(str, "WIIMOTE_BUTTON_PLUS") == 0) {
+		return WIIMOTE_BUTTON_PLUS;
+	}
+	else if (strcmp(str, "WIIMOTE_BUTTON_MINUS") == 0) {
+		return WIIMOTE_BUTTON_MINUS;
+	}
+	else if (strcmp(str, "WIIMOTE_BUTTON_HOME") == 0) {
+		return WIIMOTE_BUTTON_HOME;
+	}
+	else {
+		printf("Error: Unknown button: %s\n", str);
+		return -1;
+	}
+}
 
-// Function to get input based on button press and player ID
+
+/**
+ * Loads the button mappings from a JSON file into the global buttonMappings array.
+ * 
+ * @return A pointer to the cJSON object representing the loaded JSON data, or NULL if an error occurs.
+ */
+cJSON* load_button_mappings() {
+
+    FILE *fp = fopen("./buttonMapping.json", "r");
+    if (fp == NULL) {
+        printf("Error: Unable to open the file.\n");
+        return NULL;
+    }
+
+    char buffer[1024 * 2];
+    fread(buffer, 1, sizeof(buffer), fp);
+    fclose(fp);
+
+    cJSON *json = cJSON_Parse(buffer);
+    if (json == NULL) {
+        const char *error_ptr = cJSON_GetErrorPtr();
+        if (error_ptr != NULL) {
+            printf("Error: %s\n", error_ptr);
+        }
+        cJSON_Delete(json);
+        return NULL;
+    }
+
+    // iterate through the array of button mappings
+	for (int i = 0; i < cJSON_GetArraySize(json); i++) {
+		cJSON *buttonMapping = cJSON_GetArrayItem(json, i);
+
+		// get the button macro
+		char * buttonString = cJSON_GetObjectItemCaseSensitive(buttonMapping, "button")->valuestring;
+		unsigned short button = get_macro_from_string(buttonString);
+
+		// get the continuous flag
+		bool continuous = cJSON_GetObjectItemCaseSensitive(buttonMapping, "continuous")->valueint > 0;
+
+		// get the key mapping for the players
+		cJSON *keyMapping = cJSON_GetObjectItemCaseSensitive(buttonMapping, "keyMapping");
+		char *actions[MAX_PLAYERS];
+		int num_actions = cJSON_GetArraySize(cJSON_GetObjectItemCaseSensitive(buttonMapping, "keyMapping"));
+		for (int j = 0; j < num_actions; j++) {
+			actions[j] = cJSON_GetArrayItem(keyMapping, j)->valuestring;
+		}
+
+		// add the button mapping to the global array
+		buttonMappings[i].button = button;
+		for (int j = 0; j < num_actions; j++) {
+			buttonMappings[i].actions[j] = actions[j];
+		}
+		buttonMappings[i].continuous = continuous;
+	}
+
+    // dont clean up the json object because we need the char * values
+
+    return json;
+}
+
+/**
+ * Prints the button mappings for each player.
+ * This function iterates through the buttonMappings array and prints the button,
+ * continuous flag, and actions for each player.
+ */
+void print_button_mappings() {
+	for (int i = 0; i < MAX_BUTTONS; i++) {
+		printf("button: %i\n", buttonMappings[i].button);
+		printf("continuous: %i\n", buttonMappings[i].continuous);
+		for (int j = 0; j < MAX_PLAYERS; j++) {
+			printf("player %i: %s\n", j, buttonMappings[i].actions[j]);
+		}
+	}
+}
+
+/**
+ * Returns the input for the given player and button.
+ * 
+ * @param playerID The player ID.
+ * @param button The button.
+ * @return The key input for the given player and button.
+ */
 const char* getInput(int playerID, unsigned short button) {
     if (playerID >= 1 && playerID <= MAX_PLAYERS) {
         for (int i = 0; i < MAX_BUTTONS; ++i) {
@@ -152,18 +252,17 @@ void handle_event(struct wiimote_t* wm) {
 		printf("\n\n--- EVENT [id %i] ---\n", wm->unid);
 	}
 
-	for (int i = 0; i < BUTTON_PRESS_ONCE_COUNT; ++i) {
-		if (IS_JUST_PRESSED(wm, ButtonPressOnce[i])) {
-			pressKeyOnce(getInput(wm->unid, ButtonPressOnce[i]));
+	for (int i = 0; i <MAX_BUTTONS ; ++i) {
+		if (IS_JUST_PRESSED(wm, buttonMappings[i].button)) {
+			if (buttonMappings[i].continuous) {
+				pressKey(getInput(wm->unid, buttonMappings[i].button));
+			}
+			else {
+				pressKeyOnce(getInput(wm->unid, buttonMappings[i].button));
+			}
 		}
-	}
-
-	for (int i = 0; i < BUTTON_CONTINUOUS_PRESS_COUNT; ++i) {
-		if (IS_PRESSED(wm, ButtonContinuousPress[i])) {
-			pressKey(getInput(wm->unid, ButtonContinuousPress[i]));
-		}
-		else {
-			releaseKey(getInput(wm->unid, ButtonContinuousPress[i]));
+		else if (IS_RELEASED(wm, buttonMappings[i].button) && buttonMappings[i].continuous) {
+			releaseKey(getInput(wm->unid, buttonMappings[i].button));
 		}
 	}
 	return;
@@ -270,6 +369,16 @@ short any_wiimote_connected(wiimote** wm, int wiimotes) {
  *	that occur on either device.
  */
 int main(int argc, char** argv) {
+
+	cJSON * json_object_to_free = load_button_mappings();
+	if (json_object_to_free == NULL) {
+		printf("Error: Unable to load button mappings.\n");
+		return 1;
+	}
+	if(IS_DEBUG_MODE){
+		print_button_mappings();
+	}
+
 	display = XOpenDisplay(NULL);
 
 	wiimote** wiimotes;
@@ -450,6 +559,9 @@ int main(int argc, char** argv) {
 	 *	Disconnect the wiimotes
 	 */
 	wiiuse_cleanup(wiimotes, MAX_WIIMOTES);
+
+    cJSON_Delete(json_object_to_free);
+
 
 	return 0;
 }

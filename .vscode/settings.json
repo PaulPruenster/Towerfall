@@ -3,6 +3,9 @@
         "*.rmd": "markdown",
         "wiiuse.h": "c",
         "wiiuse_internal.h": "c",
-        "xlib.h": "c"
+        "xlib.h": "c",
+        "json.h": "c",
+        "unistd.h": "c",
+        "keysymdef.h": "c"
     }
 }

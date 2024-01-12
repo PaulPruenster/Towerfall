@@ -1,0 +1,57 @@
+[
+  {
+    "button": "WIIMOTE_BUTTON_RIGHT",
+    "keyMapping": ["w", "i", "key7", "key19"],
+    "continuous": true
+  },
+  {
+    "button": "WIIMOTE_BUTTON_LEFT",
+    "keyMapping": ["s", "k", "key8", "key20"],
+    "continuous": true
+  },
+  {
+    "button": "WIIMOTE_BUTTON_UP",
+    "keyMapping": ["a", "j", "key9", "key21"],
+    "continuous": true
+  },
+  {
+    "button": "WIIMOTE_BUTTON_DOWN",
+    "keyMapping": ["d", "l", "key10", "key22"],
+    "continuous": true
+  },
+  {
+    "button": "WIIMOTE_BUTTON_ONE",
+    "keyMapping": ["f", "p", "key11", "key23"],
+    "continuous": true
+  },
+  {
+    "button": "WIIMOTE_BUTTON_TWO",
+    "keyMapping": ["c", "m", "key12", "key24"],
+    "continuous": false
+  },
+  {
+    "button": "WIIMOTE_BUTTON_A",
+    "keyMapping": ["3", "y", "key13", "key25"],
+    "continuous": false
+  },
+  {
+    "button": "WIIMOTE_BUTTON_B",
+    "keyMapping": ["x", "n", "key14", "key26"],
+    "continuous": false
+  },
+  {
+    "button": "WIIMOTE_BUTTON_PLUS",
+    "keyMapping": ["5", "c", "key15", "key27"],
+    "continuous": false
+  },
+  {
+    "button": "WIIMOTE_BUTTON_MINUS",
+    "keyMapping": ["6", "v", "key16", "key28"],
+    "continuous": false
+  },
+  {
+    "button": "WIIMOTE_BUTTON_HOME",
+    "keyMapping": ["7", "b", "key17", "key29"],
+    "continuous": false
+  }
+]
