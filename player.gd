@@ -12,6 +12,8 @@ signal im_dead
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var dashing = false
+var can_dash = true
+
 var jumping = false
 var aiming = false
 
@@ -62,9 +64,11 @@ func _physics_process(delta):
 		
 	aiming = Input.is_action_pressed(use_button)
 	
-	if Input.is_action_just_pressed("p1_dash"):
+	if can_dash and Input.is_action_just_pressed("p1_dash"):
 		dashing = true
+		can_dash = false
 		$DashTimer.start()
+		$DashCooldown.start()
 		
 	$Sprite2D.modulate = player_color
 		
@@ -133,3 +137,7 @@ func _on_area_2d_body_entered(body: Node):
 
 func _on_dash_timer_timeout():
 	dashing = false
+
+
+func _on_dash_cooldown_timeout():
+	can_dash = true
