@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://di33lnkqlrrls"]
+[gd_scene load_steps=9 format=3 uid="uid://di33lnkqlrrls"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_fpjbi"]
+[ext_resource type="Texture2D" uid="uid://cbpgovhh4kusf" path="res://assets/background.jpg" id="2_a6sm7"]
 [ext_resource type="PackedScene" uid="uid://chqr0wbi22ox" path="res://player.tscn" id="2_tlu43"]
 [ext_resource type="PackedScene" uid="uid://bbofq3diudthx" path="res://chest.tscn" id="4_bqqp5"]
 [ext_resource type="Texture2D" uid="uid://ds5248vc8ybyt" path="res://assets/Tile Map 1.png" id="5_nav4k"]
@@ -119,12 +120,14 @@ sources/0 = SubResource("TileSetAtlasSource_dxapi")
 script = ExtResource("1_fpjbi")
 metadata/_edit_horizontal_guides_ = [278.0]
 
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -30.0
-offset_top = -44.0
-offset_right = 1215.0
-offset_bottom = 707.0
-color = Color(0.521569, 0.278431, 0.443137, 0.235294)
+[node name="TextureRect" type="TextureRect" parent="."]
+z_index = -1
+offset_left = -21.0
+offset_top = -37.0
+offset_right = 1586.0
+offset_bottom = 923.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_a6sm7")
 
 [node name="Player1" parent="." instance=ExtResource("2_tlu43")]
 position = Vector2(261, 327)
@@ -155,13 +158,16 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Chest" parent="." instance=ExtResource("4_bqqp5")]
-position = Vector2(77, 119)
+position = Vector2(80, 118)
 
 [node name="Chest2" parent="." instance=ExtResource("4_bqqp5")]
-position = Vector2(349, 562)
+position = Vector2(360, 562)
 
 [node name="Chest3" parent="." instance=ExtResource("4_bqqp5")]
-position = Vector2(992, 272)
+position = Vector2(992, 274)
+
+[node name="JumpingPad" parent="." instance=ExtResource("5_rf4fh")]
+position = Vector2(778, 576)
 
 [node name="TileMap" type="TileMap" parent="."]
 scale = Vector2(2, 2)
@@ -170,9 +176,6 @@ format = 2
 layer_0/name = "Platforms"
 layer_0/z_index = -1
 layer_0/tile_data = PackedInt32Array(720896, 0, 3, 1179667, 0, 3, 589851, 0, 3, 262160, 0, 3, 262165, 131072, 3, 589856, 131072, 3, 1179683, 131072, 3, 720912, 131072, 3, 262161, 65536, 3, 262162, 65536, 3, 262163, 65536, 3, 262164, 65536, 3, 720897, 65536, 3, 720898, 65536, 3, 720899, 65536, 3, 720900, 65536, 3, 720901, 65536, 3, 720902, 65536, 3, 720903, 65536, 3, 720904, 65536, 3, 720905, 65536, 3, 720906, 65536, 3, 720907, 65536, 3, 720908, 65536, 3, 720909, 65536, 3, 720910, 65536, 3, 720911, 65536, 3, 589852, 65536, 3, 589853, 65536, 3, 589854, 65536, 3, 589855, 65536, 3, 1179668, 65536, 3, 1179669, 65536, 3, 1179670, 65536, 3, 1179671, 65536, 3, 1179672, 65536, 3, 1179673, 65536, 3, 1179674, 65536, 3, 1179675, 65536, 3, 1179676, 65536, 3, 1179677, 65536, 3, 1179678, 65536, 3, 1179679, 65536, 3, 1179680, 65536, 3, 1179681, 65536, 3, 1179682, 65536, 3, 1179658, 0, 3, 1179659, 65536, 3, 1179660, 65536, 3, 1179661, 65536, 3, 1179662, 131072, 3, 262146, 196608, 3, 196610, 393216, 3, 655365, 393216, 3, 196629, 393216, 3, 1114137, 393216, 3, 524320, 393216, 2, 1114124, 393216, 2, 589837, 393216, 0, 655373, 393216, 1, 589825, 393216, 0, 655361, 393216, 1, 1048609, 393216, 0, 1114145, 393216, 1)
-
-[node name="JumpingPad" parent="." instance=ExtResource("5_rf4fh")]
-position = Vector2(778, 576)
 
 [connection signal="im_dead" from="Player1" to="." method="_on_player_1_im_dead"]
 [connection signal="im_dead" from="Player2" to="." method="_on_player_2_im_dead"]
