@@ -4,11 +4,15 @@ extends CharacterBody2D
 const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
 const TERMINAL_VELOCITY = 1000
+const DASH_VELOCITY = 700
 
 signal im_dead
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+
+var dashing = false
+var can_dash = true
 
 var jumping = false
 var aiming = false
@@ -55,10 +59,16 @@ func can_shoot(direction: Vector2):
 
 func _physics_process(delta):
 	# Add the gravity
-	if not is_on_floor() and velocity.y < TERMINAL_VELOCITY:
+	if not is_on_floor() and not dashing and velocity.y < TERMINAL_VELOCITY:
 		velocity.y += gravity * delta
 		
 	aiming = Input.is_action_pressed(use_button)
+	
+	if can_dash and Input.is_action_just_pressed("p1_dash"):
+		dashing = true
+		can_dash = false
+		$DashTimer.start()
+		$DashCooldown.start()
 		
 	$Sprite2D.modulate = player_color
 		
@@ -82,9 +92,13 @@ func _physics_process(delta):
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_vector(left_button, right_button, up_button, down_button)
 	if direction != Vector2.ZERO and not aiming:
-		velocity.x = direction.x * SPEED
+		if dashing:
+			velocity.x = direction.x * DASH_VELOCITY
+			velocity.y = direction.y * DASH_VELOCITY * 0.7 # frog mi net wieso
+		else:
+			velocity.x = direction.x * SPEED
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, SPEED / 5)
 	move_and_slide()
 	
 	if aiming:
@@ -119,3 +133,11 @@ func _physics_process(delta):
 func _on_area_2d_body_entered(body: Node):
 	if body != self and body.is_in_group("player"):
 		hurt()
+
+
+func _on_dash_timer_timeout():
+	dashing = false
+
+
+func _on_dash_cooldown_timeout():
+	can_dash = true

@@ -33,7 +33,7 @@ scale_curve = SubResource("CurveTexture_f5t13")
 [sub_resource type="CanvasTexture" id="CanvasTexture_xtq8u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cpe45"]
-size = Vector2(21, 2.5)
+size = Vector2(22, 2)
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_dmoi7")
@@ -48,6 +48,7 @@ shape = SubResource("RectangleShape2D_v8e8u")
 position = Vector2(-4.76837e-07, 2.14577e-06)
 scale = Vector2(24, 48)
 texture = SubResource("CanvasTexture_21paj")
+flip_v = true
 
 [node name="Landing" type="GPUParticles2D" parent="."]
 position = Vector2(0, 24)
@@ -74,6 +75,7 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(0, -26)
 
 [node name="Head" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_cpe45")
 
 [node name="HealthCount" type="Label" parent="."]
@@ -84,5 +86,16 @@ offset_bottom = 11.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="DashTimer" type="Timer" parent="."]
+wait_time = 0.15
+one_shot = true
+
+[node name="DashCooldown" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]

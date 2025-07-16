@@ -1,12 +1,11 @@
 extends Area2D
 
-@export_color_no_alpha var color
 @export var timer_length = 5
 
-@onready var sprite = $Sprite2D
 @onready var timer = $Regeneration
 @onready var particles = $Recharged
 @onready var progress = $ProgressBar
+@onready var animated_sprite = $AnimatedSprite2D
 
 var lootable = true
 
@@ -20,11 +19,11 @@ func _physics_process(delta):
 func set_lootable(new_val: bool):
 	lootable = new_val
 	if new_val:
-		sprite.modulate = color
+		animated_sprite.frame = 0
 		particles.emitting = true
 		progress.hide()
 	else:
-		sprite.modulate = Color(color, 0.5)
+		animated_sprite.frame = 1
 		timer.start()
 		progress.show()
 	
