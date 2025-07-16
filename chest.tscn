@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://bbofq3diudthx"]
 
-[ext_resource type="Script" path="res://chest.gd" id="1_ge0ck"]
+[ext_resource type="Script" uid="uid://cekykt817r0o5" path="res://chest.gd" id="1_ge0ck"]
 [ext_resource type="Texture2D" uid="uid://b0oacx4x2uke5" path="res://assets/microFantasy.v0.4/items/ches2t_closed.png" id="2_55y8c"]
 [ext_resource type="Texture2D" uid="uid://boljvvm2dsqsr" path="res://assets/microFantasy.v0.4/items/ches2t_open_empty.png" id="3_6bdw1"]
 
