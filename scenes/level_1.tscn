@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://di33lnkqlrrls"]
+[gd_scene load_steps=11 format=3 uid="uid://di33lnkqlrrls"]
 
 [ext_resource type="Script" uid="uid://byx1raxb7t7cp" path="res://world.gd" id="1_fpjbi"]
 [ext_resource type="Texture2D" uid="uid://cbpgovhh4kusf" path="res://assets/background.jpg" id="2_a6sm7"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://ds5248vc8ybyt" path="res://assets/Tile Map 1.png" id="5_nav4k"]
 [ext_resource type="PackedScene" uid="uid://cv2w1s3culsv5" path="res://jumping_pad.tscn" id="5_rf4fh"]
 [ext_resource type="PackedScene" uid="uid://1yjfjra6ueef" path="res://gate.tscn" id="7_3dgmq"]
+[ext_resource type="PackedScene" uid="uid://c7rv5bmdyxay8" path="res://song_player.tscn" id="8_15mv3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dxapi"]
 texture = ExtResource("5_nav4k")
@@ -129,6 +130,8 @@ target_node = NodePath("../Gate2")
 [node name="Gate2" parent="." instance=ExtResource("7_3dgmq")]
 position = Vector2(424, 524)
 target_node = NodePath("../Gate")
+
+[node name="SongPlayer" parent="." instance=ExtResource("8_15mv3")]
 
 [connection signal="im_dead" from="Player1" to="." method="_on_player_1_im_dead"]
 [connection signal="im_dead" from="Player2" to="." method="_on_player_2_im_dead"]
