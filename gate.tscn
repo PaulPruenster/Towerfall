@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://1yjfjra6ueef"]
 
 [ext_resource type="Texture2D" uid="uid://b4y1hrmey2ch" path="res://assets/Kings and Pigs/Sprites/11-Door/Opening (46x56).png" id="1_npbvb"]
-[ext_resource type="Script" path="res://gate.gd" id="2_256yr"]
+[ext_resource type="Script" uid="uid://bfrofbkmdu0a6" path="res://gate.gd" id="2_256yr"]
 [ext_resource type="Texture2D" uid="uid://c012dhxfr2j6p" path="res://assets/Kings and Pigs/Sprites/11-Door/Closiong (46x56).png" id="2_kbxcq"]
 [ext_resource type="Texture2D" uid="uid://b8xcfaqmvk362" path="res://assets/Kings and Pigs/Sprites/11-Door/Idle.png" id="3_jf7j8"]
 
@@ -214,10 +214,10 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_knpp5"]
 _data = {
-"RESET": SubResource("Animation_x6v4w"),
-"close": SubResource("Animation_2icl3"),
-"idle": SubResource("Animation_ivouj"),
-"open": SubResource("Animation_s7p1w")
+&"RESET": SubResource("Animation_x6v4w"),
+&"close": SubResource("Animation_2icl3"),
+&"idle": SubResource("Animation_ivouj"),
+&"open": SubResource("Animation_s7p1w")
 }
 
 [node name="Gate" type="Node2D"]
