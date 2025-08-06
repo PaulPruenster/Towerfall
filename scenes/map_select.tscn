@@ -1,0 +1,77 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcd7qjd1fto8p"]
+
+[sub_resource type="Curve2D" id="Curve2D_tv5es"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 305, 242, 0, 0, 0, 0, 259, 298, 0, 0, 0, 0, 267, 363, 0, 0, 0, 0, 322, 405, 0, 0, 0, 0, 410, 415)
+}
+point_count = 5
+
+[node name="MapSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Level1" type="Button" parent="."]
+layout_mode = 2
+offset_left = 267.0
+offset_top = 181.0
+offset_right = 329.0
+offset_bottom = 212.0
+size_flags_horizontal = 4
+size_flags_vertical = 6
+focus_neighbor_right = NodePath("../Level3")
+focus_neighbor_bottom = NodePath("../Level2")
+text = "Level 1"
+
+[node name="Level2" type="Button" parent="."]
+layout_mode = 2
+offset_left = 382.0
+offset_top = 446.0
+offset_right = 444.0
+offset_bottom = 477.0
+size_flags_horizontal = 4
+size_flags_vertical = 6
+focus_neighbor_top = NodePath("../Level1")
+focus_neighbor_right = NodePath("../Level3")
+text = "Level 2"
+
+[node name="Level3" type="Button" parent="."]
+layout_mode = 2
+offset_left = 771.0
+offset_top = 162.0
+offset_right = 833.0
+offset_bottom = 193.0
+size_flags_horizontal = 4
+focus_neighbor_left = NodePath("../Level1")
+focus_neighbor_bottom = NodePath("../Level2")
+text = "Level 3"
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_tv5es")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2(305, 242)
+rotation = 2.25847
+rotates = false
+
+[node name="ColorRect" type="ColorRect" parent="Path2D/PathFollow2D"]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.83345, 0, 0.10605, 1)
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimationTree"]
+root_node = NodePath("../../Path2D/PathFollow2D")
