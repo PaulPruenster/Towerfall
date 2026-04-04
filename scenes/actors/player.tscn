@@ -1,0 +1,146 @@
+[gd_scene load_steps=12 format=3 uid="uid://chqr0wbi22ox"]
+
+[ext_resource type="Script" path="res://scripts/actors/player.gd" id="1_dmoi7"]
+[ext_resource type="PackedScene" path="res://scenes/effects/explosion.tscn" id="2_hq8pn"]
+[ext_resource type="PackedScene" path="res://scenes/actors/arrow.tscn" id="3_s2ths"]
+[ext_resource type="Script" path="res://scripts/actors/character_animator.gd" id="4_o4a3j"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v8e8u"]
+size = Vector2(10.5, 20.5)
+
+[sub_resource type="Curve" id="Curve_dg675"]
+_data = [Vector2(0.747748, 1), 0.0, 0.0, 0, 0, Vector2(0.750751, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_f5t13"]
+curve = SubResource("Curve_dg675")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pwy4d"]
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+velocity_pivot = Vector3(1, 0, 0)
+direction = Vector3(0, 0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 70.0
+gravity = Vector3(0, 0, 0)
+linear_accel_max = 10.0
+radial_accel_max = 10.0
+scale_min = 0.5
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_f5t13")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_xtq8u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cpe45"]
+size = Vector2(18, 2)
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+script = ExtResource("1_dmoi7")
+deathParticle = ExtResource("2_hq8pn")
+arrow = ExtResource("3_s2ths")
+
+[node name="Body" type="CollisionShape2D" parent="."]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_v8e8u")
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals"]
+
+[node name="CharacterAnimator" type="Node" parent="."]
+script = ExtResource("4_o4a3j")
+
+[node name="PlayerMarker" type="Polygon2D" parent="Visuals"]
+position = Vector2(0, -31)
+z_index = 1
+color = Color(1, 1, 1, 1)
+polygon = PackedVector2Array(0, -5, 5, 0, 0, 5, -5, 0)
+
+[node name="Landing" type="GPUParticles2D" parent="."]
+position = Vector2(0, 24)
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_pwy4d")
+texture = SubResource("CanvasTexture_xtq8u")
+lifetime = 0.5
+one_shot = true
+preprocess = 1.0
+
+[node name="ArrowCount" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -56.0
+offset_right = 20.0
+offset_bottom = -28.0
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="SpecialAmmo" type="Label" parent="."]
+visible = false
+offset_left = -40.0
+offset_top = -82.0
+offset_right = 40.0
+offset_bottom = -64.0
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="DashStatus" type="Label" parent="."]
+offset_left = -26.0
+offset_top = 14.0
+offset_right = 26.0
+offset_bottom = 29.0
+theme_override_font_sizes/font_size = 9
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="BuffStatus" type="Label" parent="."]
+visible = false
+offset_left = -46.0
+offset_top = -98.0
+offset_right = 46.0
+offset_bottom = -84.0
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="AimPreview" type="Line2D" parent="."]
+visible = false
+z_index = -1
+width = 2.0
+default_color = Color(1, 1, 1, 0.7)
+points = PackedVector2Array(0, 0, 48, 0)
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(0, -26)
+
+[node name="Head" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_cpe45")
+
+[node name="HealthCount" type="Label" parent="."]
+offset_left = -19.0
+offset_top = -12.0
+offset_right = 21.0
+offset_bottom = 11.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="DashTimer" type="Timer" parent="."]
+wait_time = 0.15
+one_shot = true
+
+[node name="DashCooldown" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="DashCooldown" to="." method="_on_dash_cooldown_timeout"]

@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/pressure_switch.gd" id="1_ux4ai"]
+[ext_resource type="Texture2D" path="res://assets/0x72_DungeonTilesetII_v1.6/0x72_DungeonTilesetII_v1.6/frames/button_red_up.png" id="2_fauwh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0r5d0"]
+size = Vector2(20, 10)
+
+[node name="PressureSwitch" type="Area2D"]
+script = ExtResource("1_ux4ai")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_0r5d0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -5)
+scale = Vector2(2, 2)
+texture = ExtResource("2_fauwh")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

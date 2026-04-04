@@ -1,0 +1,91 @@
+[gd_scene load_steps=12 format=3 uid="uid://bbofq3diudthx"]
+
+[ext_resource type="Script" path="res://scripts/gameplay/chest.gd" id="1_ge0ck"]
+[ext_resource type="Texture2D" path="res://assets/generated/chest/chest_closed.png" id="2_55y8c"]
+[ext_resource type="Texture2D" path="res://assets/generated/chest/chest_open_empty.png" id="3_6bdw1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xw0bj"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ogvuj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_55y8c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_6bdw1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_e0rtk"]
+offsets = PackedFloat32Array(0, 0.436066)
+colors = PackedColorArray(0, 0.968627, 0.74902, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6t62m"]
+gradient = SubResource("Gradient_e0rtk")
+
+[sub_resource type="Curve" id="Curve_voibc"]
+_data = [Vector2(0.504505, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8l10j"]
+curve = SubResource("Curve_voibc")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ekwhh"]
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_8l10j")
+color_ramp = SubResource("GradientTexture1D_6t62m")
+
+[sub_resource type="ImageTexture" id="ImageTexture_0n0je"]
+
+[node name="Chest" type="Area2D"]
+script = ExtResource("1_ge0ck")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_xw0bj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_ogvuj")
+
+[node name="Regeneration" type="Timer" parent="."]
+one_shot = true
+
+[node name="Recharged" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_ekwhh")
+lifetime = 0.6
+one_shot = true
+preprocess = 0.5
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = -10.0
+offset_top = -22.0
+offset_right = 10.0
+offset_bottom = -14.0
+value = 50.0
+show_percentage = false
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+texture = SubResource("ImageTexture_0n0je")
+
+[node name="LootLabel" type="Label" parent="."]
+offset_left = -32.0
+offset_top = -38.0
+offset_right = 32.0
+offset_bottom = -22.0
+theme_override_font_sizes/font_size = 9
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Regeneration" to="." method="_on_regeneration_timeout"]

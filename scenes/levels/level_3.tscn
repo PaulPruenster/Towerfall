@@ -1,0 +1,63 @@
+[gd_scene load_steps=6 format=3 uid="uid://chfb057v602f8"]
+
+[ext_resource type="Script" path="res://scripts/gameplay/world.gd" id="1_u0qbb"]
+[ext_resource type="PackedScene" path="res://scenes/actors/player.tscn" id="1_4syg6"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/floor.tscn" id="2_w72bs"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/spikes.tscn" id="3_38ej2"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/moving_platform.tscn" id="4_om1l7"]
+
+[node name="Level3" type="Node2D"]
+script = ExtResource("1_u0qbb")
+
+[node name="Player1" parent="." instance=ExtResource("1_4syg6")]
+position = Vector2(235, 296)
+player_color = Color(0, 1, 0, 1)
+
+[node name="Player2" parent="." instance=ExtResource("1_4syg6")]
+position = Vector2(986, 308)
+player_color = Color(1, 0, 0, 1)
+left_button = "p2_left"
+right_button = "p2_right"
+up_button = "p2_up"
+down_button = "p2_down"
+use_button = "p2_use"
+jump_button = "p2_jump"
+dash_button = "p2_dash"
+
+[node name="Floor" parent="." instance=ExtResource("2_w72bs")]
+position = Vector2(217, 378)
+
+[node name="Floor2" parent="." instance=ExtResource("2_w72bs")]
+position = Vector2(916, 386)
+
+[node name="Floor3" parent="." instance=ExtResource("2_w72bs")]
+position = Vector2(574, 636)
+
+[node name="Floor4" parent="." instance=ExtResource("2_w72bs")]
+position = Vector2(571, 133)
+
+[node name="Spikes" parent="." instance=ExtResource("3_38ej2")]
+position = Vector2(571, 623)
+
+[node name="MovingPlatform" parent="." instance=ExtResource("4_om1l7")]
+position = Vector2(571, 502)
+move_offset = Vector2(0, -240)
+travel_time = 2.2
+
+[node name="RestartTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Label" type="Label" parent="."]
+offset_right = 1152.0
+offset_bottom = 153.0
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(0.741176, 0.203922, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "Towerfall"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="im_dead" from="Player1" to="." method="_on_player_1_im_dead"]
+[connection signal="im_dead" from="Player2" to="." method="_on_player_2_im_dead"]
+[connection signal="timeout" from="RestartTimer" to="." method="_on_timer_timeout"]

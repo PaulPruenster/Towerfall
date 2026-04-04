@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bjclelj4uer75"]
+
+[ext_resource type="Script" path="res://scripts/actors/arrow_dummy.gd" id="1_vapnm"]
+[ext_resource type="Texture2D" path="res://assets/0x72_DungeonTilesetII_v1.6/0x72_DungeonTilesetII_v1.6/frames/weapon_arrow.png" id="2_4nsr7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2g3tr"]
+size = Vector2(4, 12)
+
+[node name="ArrowDummy" type="Area2D" groups=["arrow"]]
+script = ExtResource("1_vapnm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_2g3tr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -1)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("2_4nsr7")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

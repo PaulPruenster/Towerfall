@@ -1,0 +1,75 @@
+[gd_scene load_steps=8 format=3 uid="uid://cv2w1s3culsv5"]
+
+[ext_resource type="Script" path="res://scripts/gameplay/jumping_pad.gd" id="1_srwv1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5q027"]
+size = Vector2(52, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8c4rc"]
+size = Vector2(44, 12)
+
+[sub_resource type="Curve" id="Curve_jj4t5"]
+_data = [Vector2(0.498498, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.78157, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3b0s6"]
+curve = SubResource("Curve_jj4t5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8uxu0"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 24.0
+initial_velocity_min = 80.0
+initial_velocity_max = 140.0
+gravity = Vector3(0, 60, 0)
+scale_min = 1.5
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_3b0s6")
+
+[node name="JumpingPad" type="Node2D"]
+script = ExtResource("1_srwv1")
+
+[node name="Glow" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+z_index = -1
+
+[node name="Base" type="Sprite2D" parent="."]
+position = Vector2(0, -4)
+
+[node name="Plate" type="Sprite2D" parent="."]
+position = Vector2(0, -10)
+
+[node name="BaseCompressedPose" type="Marker2D" parent="."]
+position = Vector2(0, 4)
+
+[node name="PlateCompressedPose" type="Marker2D" parent="."]
+position = Vector2(0, 5)
+
+[node name="GlowCompressedPose" type="Marker2D" parent="."]
+position = Vector2(0, 2)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_8c4rc")
+
+[node name="TriggerArea" type="Area2D" parent="."]
+position = Vector2(0, -20)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="TriggerArea"]
+shape = SubResource("RectangleShape2D_5q027")
+
+[node name="BurstParticles" type="GPUParticles2D" parent="."]
+position = Vector2(0, -10)
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_8uxu0")
+lifetime = 0.18
+one_shot = true
+
+[node name="CooldownTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="body_entered" from="TriggerArea" to="." method="_on_trigger_area_body_entered"]
+[connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]

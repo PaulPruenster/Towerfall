@@ -1,0 +1,93 @@
+[gd_scene format=4 uid="uid://bcb2snb3r6llu"]
+
+[ext_resource type="PackedScene" uid="uid://chqr0wbi22ox" path="res://scenes/actors/player.tscn" id="1_miyu1"]
+[ext_resource type="Script" uid="uid://byx1raxb7t7cp" path="res://scripts/gameplay/world.gd" id="1_o8w0s"]
+[ext_resource type="PackedScene" uid="uid://dt3u4l3juvvwr" path="res://scenes/gameplay/spikes.tscn" id="3_5r0u2"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/moving_platform.tscn" id="4_n1j4d"]
+[ext_resource type="PackedScene" uid="uid://1yjfjra6ueef" path="res://scenes/gameplay/gate.tscn" id="5_iw1m8"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/pressure_switch.tscn" id="6_e5c88"]
+[ext_resource type="TileSet" uid="uid://cxtaon2v0hqbe" path="res://assets/generated/tiles/level1_tileset.tres" id="7_ibugp"]
+[ext_resource type="PackedScene" uid="uid://bbofq3diudthx" path="res://scenes/gameplay/chest.tscn" id="8_8qukl"]
+
+[node name="Level2" type="Node2D" unique_id=35890786]
+script = ExtResource("1_o8w0s")
+
+[node name="Player1" parent="." unique_id=506597843 instance=ExtResource("1_miyu1")]
+position = Vector2(263, 108)
+player_color = Color(0, 1, 0, 1)
+
+[node name="Player2" parent="." unique_id=595273974 instance=ExtResource("1_miyu1")]
+position = Vector2(976, 427)
+player_color = Color(1, 0, 0, 1)
+left_button = "p2_left"
+right_button = "p2_right"
+up_button = "p2_up"
+down_button = "p2_down"
+use_button = "p2_use"
+jump_button = "p2_jump"
+dash_button = "p2_dash"
+
+[node name="Spikes" parent="." unique_id=1216912148 instance=ExtResource("3_5r0u2")]
+position = Vector2(578, 448)
+
+[node name="MovingPlatform" parent="." unique_id=1902594540 instance=ExtResource("4_n1j4d")]
+position = Vector2(557, 336)
+travel_time = 1.8
+
+[node name="GateLeft" parent="." unique_id=1354521448 instance=ExtResource("5_iw1m8")]
+position = Vector2(194.00002, 398)
+target_node = NodePath("../GateRight")
+starts_enabled = false
+
+[node name="GateRight" parent="." unique_id=51112329 instance=ExtResource("5_iw1m8")]
+position = Vector2(896, 78)
+target_node = NodePath("../GateLeft")
+starts_enabled = false
+
+[node name="PressureSwitch" parent="." unique_id=90907784 instance=ExtResource("6_e5c88")]
+position = Vector2(524, 121)
+target_nodes = Array[NodePath]([NodePath("../GateLeft"), NodePath("../GateRight")])
+
+[node name="RestartTimer" type="Timer" parent="." unique_id=1347368440]
+one_shot = true
+
+[node name="Label" type="Label" parent="." unique_id=1367687794]
+offset_left = -2.0
+offset_top = -1.0
+offset_right = 1150.0
+offset_bottom = 152.0
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(0.741176, 0.203922, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "Towerfall"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Platforms" type="TileMapLayer" parent="." unique_id=1840980831]
+z_index = -1
+use_parent_material = true
+scale = Vector2(2, 2)
+tile_map_data = PackedByteArray("AAAEAAQAAAABAAAAAAAFAAQAAAALAAMAAAAGAAQAAAALAAMAAAAHAAQAAAALAAMAAAAIAAQAAAAKAAMAAAAbAAQAAAABAAAAAAAcAAQAAAALAAMAAAAdAAQAAAALAAMAAAAeAAQAAAALAAMAAAAfAAQAAAAKAAMAAAAJAAcAAAABAAAAAAAKAAcAAAALAAMAAAALAAcAAAALAAMAAAAMAAcAAAALAAMAAAANAAcAAAAKAAMAAAAWAAcAAAABAAAAAAAXAAcAAAALAAMAAAAYAAcAAAALAAMAAAAZAAcAAAALAAMAAAAaAAcAAAAKAAMAAAAQAAQAAAALAAMAAAARAAQAAAALAAMAAAASAAQAAAALAAMAAAATAAQAAAALAAMAAAAUAAQAAAAKAAMAAAAPAAQAAAABAAAAAAAEAA4AAAABAAAAAAAFAA4AAAALAAMAAAAGAA4AAAALAAMAAAAHAA4AAAALAAMAAAAIAA4AAAAKAAMAAAAJABEAAAABAAAAAAAKABEAAAALAAMAAAALABEAAAALAAMAAAAMABEAAAALAAMAAAANABEAAAAKAAMAAAAPAA4AAAABAAAAAAAQAA4AAAALAAMAAAARAA4AAAALAAMAAAASAA4AAAALAAMAAAATAA4AAAALAAMAAAAUAA4AAAAKAAMAAAAWABEAAAABAAAAAAAXABEAAAALAAMAAAAYABEAAAALAAMAAAAZABEAAAALAAMAAAAaABEAAAAKAAMAAAAbAA4AAAABAAAAAAAcAA4AAAALAAMAAAAdAA4AAAALAAMAAAAeAA4AAAALAAMAAAAfAA4AAAAKAAMAAAA=")
+tile_set = ExtResource("7_ibugp")
+
+[node name="Chest" parent="." unique_id=295947999 instance=ExtResource("8_8qukl")]
+position = Vector2(364, 516)
+
+[node name="Chest2" parent="." unique_id=1882018865 instance=ExtResource("8_8qukl")]
+position = Vector2(783, 516)
+
+[node name="Chest3" parent="." unique_id=1014811276 instance=ExtResource("8_8qukl")]
+position = Vector2(622, 100)
+
+[node name="Spikes2" parent="." unique_id=1020724772 instance=ExtResource("3_5r0u2")]
+position = Vector2(371, 225)
+scale = Vector2(0.41, 1)
+
+[node name="Spikes3" parent="." unique_id=1706254973 instance=ExtResource("3_5r0u2")]
+position = Vector2(784, 225)
+scale = Vector2(0.403, 1)
+
+[connection signal="im_dead" from="Player1" to="." method="_on_player_1_im_dead"]
+[connection signal="im_dead" from="Player2" to="." method="_on_player_2_im_dead"]
+[connection signal="timeout" from="RestartTimer" to="." method="_on_timer_timeout"]

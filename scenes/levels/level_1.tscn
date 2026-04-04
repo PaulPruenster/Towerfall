@@ -1,0 +1,86 @@
+[gd_scene format=4 uid="uid://di33lnkqlrrls"]
+
+[ext_resource type="Script" uid="uid://byx1raxb7t7cp" path="res://scripts/gameplay/world.gd" id="1_fpjbi"]
+[ext_resource type="Texture2D" uid="uid://bekb0sebxo3u5" path="res://assets/generated/backgrounds/level1_background.png" id="2_a6sm7"]
+[ext_resource type="PackedScene" uid="uid://chqr0wbi22ox" path="res://scenes/actors/player.tscn" id="2_tlu43"]
+[ext_resource type="PackedScene" uid="uid://bbofq3diudthx" path="res://scenes/gameplay/chest.tscn" id="4_bqqp5"]
+[ext_resource type="PackedScene" uid="uid://cv2w1s3culsv5" path="res://scenes/gameplay/jumping_pad.tscn" id="5_rf4fh"]
+[ext_resource type="TileSet" uid="uid://cxtaon2v0hqbe" path="res://assets/generated/tiles/level1_tileset.tres" id="6_kp4lh"]
+[ext_resource type="PackedScene" uid="uid://1yjfjra6ueef" path="res://scenes/gameplay/gate.tscn" id="7_3dgmq"]
+[ext_resource type="PackedScene" uid="uid://c7rv5bmdyxay8" path="res://scenes/audio/song_player.tscn" id="8_15mv3"]
+
+[node name="level1" type="Node2D" unique_id=903205456]
+script = ExtResource("1_fpjbi")
+metadata/_edit_horizontal_guides_ = [278.0]
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=680204424]
+modulate = Color(1, 1, 1, 0.88)
+z_index = -1
+offset_left = -21.0
+offset_top = -37.0
+offset_right = 1586.0
+offset_bottom = 923.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_a6sm7")
+
+[node name="Player1" parent="." unique_id=1722026010 instance=ExtResource("2_tlu43")]
+position = Vector2(261, 327)
+player_color = Color(0, 1, 0, 1)
+
+[node name="Player2" parent="." unique_id=412848129 instance=ExtResource("2_tlu43")]
+position = Vector2(968, 549)
+player_color = Color(1, 0, 0, 1)
+left_button = &"p2_left"
+right_button = &"p2_right"
+up_button = &"p2_up"
+down_button = &"p2_down"
+use_button = &"p2_use"
+jump_button = &"p2_jump"
+dash_button = &"p2_dash"
+
+[node name="RestartTimer" type="Timer" parent="." unique_id=897818]
+one_shot = true
+
+[node name="Label" type="Label" parent="." unique_id=128329832]
+offset_right = 1152.0
+offset_bottom = 153.0
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(0.741176, 0.203922, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "Towerfall"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Chest" parent="." unique_id=881337130 instance=ExtResource("4_bqqp5")]
+position = Vector2(400, 164)
+
+[node name="Chest2" parent="." unique_id=555130705 instance=ExtResource("4_bqqp5")]
+position = Vector2(176, 548)
+
+[node name="Chest3" parent="." unique_id=2107145031 instance=ExtResource("4_bqqp5")]
+position = Vector2(988, 260)
+
+[node name="JumpingPad" parent="." unique_id=1235626842 instance=ExtResource("5_rf4fh")]
+position = Vector2(768, 571)
+
+[node name="Gate" parent="." unique_id=150266939 instance=ExtResource("7_3dgmq")]
+position = Vector2(600, 76)
+target_node = NodePath("../Gate2")
+
+[node name="Gate2" parent="." unique_id=1117831674 instance=ExtResource("7_3dgmq")]
+position = Vector2(424, 524)
+target_node = NodePath("../Gate")
+
+[node name="SongPlayer" parent="." unique_id=1208059156 instance=ExtResource("8_15mv3")]
+
+[node name="Platforms" type="TileMapLayer" parent="." unique_id=413432521]
+z_index = -1
+use_parent_material = true
+scale = Vector2(2, 2)
+tile_map_data = PackedByteArray("AAATABIAAAABAAEAAAAQAAQAAAABAAAAAAAVAAQAAAAAAAEAAAAjABIAAAAAAAEAAAARAAQAAAABAAEAAAASAAQAAAABAAEAAAATAAQAAAABAAEAAAAUAAQAAAABAAEAAAAFAAsAAAABAAEAAAAGAAsAAAAFAAEAAAAHAAsAAAANAAEAAAAIAAsAAAANAAEAAAAJAAsAAAANAAEAAAAKAAsAAAANAAEAAAALAAsAAAABAAEAAAAMAAsAAAAAAAEAAAAVABIAAAABAAEAAAAWABIAAAABAAEAAAAXABIAAAABAAEAAAAYABIAAAABAAEAAAAZABIAAAABAAEAAAAaABIAAAABAAEAAAAbABIAAAABAAEAAAAcABIAAAABAAEAAAAdABIAAAABAAEAAAAeABIAAAABAAEAAAAfABIAAAABAAEAAAAgABIAAAABAAEAAAAhABIAAAABAAEAAAAiABIAAAABAAEAAAAKABIAAAABAAEAAAALABIAAAABAAEAAAAMABIAAAABAAEAAAANABIAAAABAAEAAAAOABIAAAAAAAEAAAALAAYAAAABAAAAAAAMAAYAAAABAAEAAAANAAYAAAABAAEAAAAOAAYAAAAAAAEAAAADABIAAAABAAEAAAAEABIAAAABAAEAAAAFABIAAAABAAEAAAAGABIAAAABAAEAAAAHABIAAAABAAEAAAAIABIAAAABAAEAAAAJABIAAAABAAEAAAASABIAAAABAAAAAAAUABIAAAABAAEAAAAEAAsAAAABAAAAAAACABIAAAABAAAAAAAHAAwAAAAFAAUAAAAIAAwAAAAFAAUAAAAJAAwAAAAFAAUAAAAIAA0AAAAJAAUAAAAHAA0AAAADAAYAAAAGAAwAAAADAAYAAAAJAA0AAAAIAAUAAAAKAAwAAAACAAUAAAAiAAkAAAAEAAQAAAAiAAoAAAAEAAQAAAAiAAsAAAAEAAQAAAAiAAwAAAAEAAQAAAAiAA0AAAAEAAQAAAAiAA4AAAACAAwAAAAdAAkAAAAFAAEAAAAdAAoAAAAHAAUAAAAdAAsAAAAHAAUAAAAdAAwAAAACAA8AAAAeAAkAAAAFAAEAAAAeAAoAAAAHAAUAAAAeAAsAAAACAA8AAAAfAAkAAAAFAAEAAAAfAAoAAAACAA8AAAAgAAkAAAAAAAEAAAAcAAkAAAAHAAAAAAAcAAoAAAAFAAQAAAAcAAsAAAAFAAQAAAAcAAwAAAAFAAQAAAAcAA0AAAAKAAYAAAAfAAYAAAACAAQAAAAfAAIAAAAGAAIAAAAfAAMAAAAEAA4AAAAfAAQAAAAEAA4AAAAfAAUAAAAEAA4AAAAiAAgAAAAMAAoAAAA=")
+tile_set = ExtResource("6_kp4lh")
+
+[connection signal="im_dead" from="Player1" to="." method="_on_player_1_im_dead"]
+[connection signal="im_dead" from="Player2" to="." method="_on_player_2_im_dead"]
+[connection signal="timeout" from="RestartTimer" to="." method="_on_timer_timeout"]
