@@ -1,0 +1,319 @@
+[gd_scene format=3 uid="uid://cfr3u6dpjtb7r"]
+
+[ext_resource type="Script" path="res://scripts/ui/hud_controller.gd" id="1_76a3e"]
+
+[node name="HUD" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_76a3e")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TopStrip" type="Control" parent="Root"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 126.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="Root/TopStrip"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 0
+
+[node name="PlayerGrid" type="GridContainer" parent="Root/TopStrip/Margin"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 10
+
+[node name="PlayerPanel1" type="PanelContainer" parent="Root/TopStrip/Margin/PlayerGrid"]
+visible = false
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="Layout" type="VBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TopRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Marker" type="Panel" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout/TopRow"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+
+[node name="HealthRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout/TopRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="TopSpacer" type="Control" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DashRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout/TopRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BottomRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AmmoRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="SpecialRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="BottomSpacer" type="Control" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BuffRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="CooldownTrack" type="Panel" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout"]
+visible = false
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+size_flags_horizontal = 3
+clip_contents = true
+
+[node name="Fill" type="ColorRect" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel1/Margin/Layout/CooldownTrack"]
+offset_right = 0.0
+offset_bottom = 4.0
+
+[node name="PlayerPanel2" type="PanelContainer" parent="Root/TopStrip/Margin/PlayerGrid"]
+visible = false
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="Layout" type="VBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TopRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Marker" type="Panel" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout/TopRow"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+
+[node name="HealthRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout/TopRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="TopSpacer" type="Control" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DashRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout/TopRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BottomRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AmmoRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="SpecialRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="BottomSpacer" type="Control" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BuffRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="CooldownTrack" type="Panel" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout"]
+visible = false
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+size_flags_horizontal = 3
+clip_contents = true
+
+[node name="Fill" type="ColorRect" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel2/Margin/Layout/CooldownTrack"]
+offset_right = 0.0
+offset_bottom = 4.0
+
+[node name="PlayerPanel3" type="PanelContainer" parent="Root/TopStrip/Margin/PlayerGrid"]
+visible = false
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="Layout" type="VBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TopRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Marker" type="Panel" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout/TopRow"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+
+[node name="HealthRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout/TopRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="TopSpacer" type="Control" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DashRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout/TopRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BottomRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AmmoRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="SpecialRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="BottomSpacer" type="Control" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BuffRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="CooldownTrack" type="Panel" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout"]
+visible = false
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+size_flags_horizontal = 3
+clip_contents = true
+
+[node name="Fill" type="ColorRect" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel3/Margin/Layout/CooldownTrack"]
+offset_right = 0.0
+offset_bottom = 4.0
+
+[node name="PlayerPanel4" type="PanelContainer" parent="Root/TopStrip/Margin/PlayerGrid"]
+visible = false
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="Layout" type="VBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TopRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Marker" type="Panel" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout/TopRow"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+
+[node name="HealthRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout/TopRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="TopSpacer" type="Control" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DashRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout/TopRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BottomRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AmmoRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="SpecialRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="BottomSpacer" type="Control" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BuffRow" type="HBoxContainer" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout/BottomRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="CooldownTrack" type="Panel" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout"]
+visible = false
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+size_flags_horizontal = 3
+clip_contents = true
+
+[node name="Fill" type="ColorRect" parent="Root/TopStrip/Margin/PlayerGrid/PlayerPanel4/Margin/Layout/CooldownTrack"]
+offset_right = 0.0
+offset_bottom = 4.0

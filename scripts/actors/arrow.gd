@@ -1,6 +1,11 @@
 class_name Arrow
 extends CharacterBody2D
 
+signal hit_player(target, shooter, arrow_type)
+signal hit_wall(shooter, arrow_type)
+signal ricocheted(shooter, remaining_ricochets)
+signal exploded(shooter, arrow_type, hit_players)
+
 enum ArrowType {
 	NORMAL,
 	EXPLOSIVE,
@@ -86,6 +91,26 @@ static func get_arrow_color(new_arrow_type: int) -> Color:
 		_:
 			return Color.WHITE
 
+static func get_gravity_scale_for_type(new_arrow_type: int) -> float:
+	match new_arrow_type:
+		ArrowType.EXPLOSIVE:
+			return 0.00035
+		ArrowType.RICOCHET:
+			return 0.00012
+		ArrowType.STRAIGHT:
+			return 0.0
+		_:
+			return 0.0002
+
+static func get_speed_for_type(base_speed: float, new_arrow_type: int) -> float:
+	match new_arrow_type:
+		ArrowType.EXPLOSIVE:
+			return base_speed * 0.85
+		ArrowType.RICOCHET:
+			return base_speed * 1.1
+		_:
+			return base_speed
+
 func _ready() -> void:
 	if not animated_sprite.animation_finished.is_connected(_on_animated_sprite_2d_animation_finished):
 		animated_sprite.animation_finished.connect(_on_animated_sprite_2d_animation_finished)
@@ -93,7 +118,7 @@ func _ready() -> void:
 
 func configure(new_owner: Player, new_arrow_type: int) -> void:
 	var type_changed := arrow_type != new_arrow_type
-	var previous_owner := shooter
+	var previous_owner := get_shooter()
 	var owner_changed := previous_owner != new_owner
 	if previous_owner != null and previous_owner != new_owner:
 		remove_collision_exception_with(previous_owner)
@@ -101,8 +126,9 @@ func configure(new_owner: Player, new_arrow_type: int) -> void:
 	arrow_type = new_arrow_type
 	shooter_collision_armed = false
 
-	if shooter != null:
-		add_collision_exception_with(shooter)
+	var current_shooter := get_shooter()
+	if current_shooter != null:
+		add_collision_exception_with(current_shooter)
 
 	if arrow_type == ArrowType.RICOCHET:
 		ricochets_left = MAX_RICOCHETS
@@ -116,11 +142,21 @@ func shoot() -> void:
 	active = true
 	visual_state = ArrowVisualState.FLIGHT
 	shooter_collision_armed = false
-	if shooter != null:
-		add_collision_exception_with(shooter)
+	var current_shooter := get_shooter()
+	if current_shooter != null:
+		add_collision_exception_with(current_shooter)
 	trail_particles.show()
 	collision.disabled = false
 	_play_visual_state(ArrowVisualState.FLIGHT, true)
+
+func get_shooter() -> Player:
+	if shooter == null:
+		return null
+	if is_instance_valid(shooter):
+		return shooter
+	shooter = null
+	shooter_collision_armed = true
+	return null
 
 func _wrap_to_viewport() -> void:
 	var size: Vector2 = get_viewport_rect().size
@@ -237,24 +273,10 @@ func _play_visual_state(new_state: int, force_replay: bool = false) -> void:
 		animated_sprite.play(animation_name)
 
 func _get_gravity_scale() -> float:
-	match arrow_type:
-		ArrowType.EXPLOSIVE:
-			return 0.00035
-		ArrowType.RICOCHET:
-			return 0.00012
-		ArrowType.STRAIGHT:
-			return 0.0
-		_:
-			return 0.0002
+	return get_gravity_scale_for_type(arrow_type)
 
 func _get_speed() -> float:
-	match arrow_type:
-		ArrowType.EXPLOSIVE:
-			return speed * 0.85
-		ArrowType.RICOCHET:
-			return speed * 1.1
-		_:
-			return speed
+	return get_speed_for_type(speed, arrow_type)
 
 func _spawn_dummy() -> void:
 	var dummy := ARROW_DUMMY.instantiate() as Area2D
@@ -279,12 +301,16 @@ func _explode() -> void:
 	var scene := get_tree().current_scene
 	if scene != null and scene.has_method("trigger_screenshake"):
 		scene.trigger_screenshake(10.0, 0.12)
+	var current_shooter := get_shooter()
+	var hit_players: Array[Player] = []
 	for node in get_tree().get_nodes_in_group("player"):
 		var player := node as Player
-		if player == null or player == shooter:
+		if player == null or player == current_shooter:
 			continue
 		if player.global_position.distance_to(global_position) <= EXPLOSION_RADIUS:
-			player.hurt((player.global_position - global_position).normalized(), 360.0)
+			if player.hurt((player.global_position - global_position).normalized(), 360.0, &"explosion", current_shooter):
+				hit_players.append(player)
+	exploded.emit(current_shooter, arrow_type, hit_players)
 	queue_free()
 
 func _begin_impact(new_state: int, spawn_dummy: bool) -> void:
@@ -296,26 +322,29 @@ func _begin_impact(new_state: int, spawn_dummy: bool) -> void:
 	_play_visual_state(new_state, true)
 
 func _arm_shooter_collision() -> void:
-	if shooter_collision_armed or shooter == null:
+	var current_shooter := get_shooter()
+	if shooter_collision_armed or current_shooter == null:
 		return
-	if global_position.distance_to(shooter.global_position) < SHOOTER_COLLISION_ARM_DISTANCE:
+	if global_position.distance_to(current_shooter.global_position) < SHOOTER_COLLISION_ARM_DISTANCE:
 		return
-	remove_collision_exception_with(shooter)
+	remove_collision_exception_with(current_shooter)
 	shooter_collision_armed = true
 
 func _handle_collision(collision_info: KinematicCollision2D) -> void:
 	global_position = collision_info.get_position()
 
 	var collider := collision_info.get_collider()
+	var current_shooter := get_shooter()
 	var player := collider as Player
 	if player != null:
-		if player == shooter and not shooter_collision_armed:
+		if player == current_shooter and not shooter_collision_armed:
 			return
 		if arrow_type == ArrowType.EXPLOSIVE:
 			_explode()
 			return
 		GameSfx.play(self, &"arrow_hit", global_position, randf_range(0.95, 1.05))
-		player.hurt(direction.normalized(), 360.0)
+		if player.hurt(direction.normalized(), 360.0, &"arrow", current_shooter):
+			hit_player.emit(player, current_shooter, arrow_type)
 		_begin_impact(ArrowVisualState.HIT_ENEMY, false)
 		return
 
@@ -324,6 +353,7 @@ func _handle_collision(collision_info: KinematicCollision2D) -> void:
 		direction = direction.bounce(collision_info.get_normal()).normalized()
 		global_position += collision_info.get_normal() * 14.0
 		GameSfx.play(self, &"ricochet", global_position, randf_range(0.96, 1.06))
+		ricocheted.emit(current_shooter, ricochets_left)
 		return
 
 	if arrow_type == ArrowType.EXPLOSIVE:
@@ -331,6 +361,7 @@ func _handle_collision(collision_info: KinematicCollision2D) -> void:
 		return
 
 	GameSfx.play(self, &"arrow_hit", global_position, randf_range(0.9, 1.0))
+	hit_wall.emit(current_shooter, arrow_type)
 	_begin_impact(ArrowVisualState.HIT_WALL, true)
 
 func _physics_process(delta: float) -> void:

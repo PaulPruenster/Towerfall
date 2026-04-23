@@ -1,5 +1,7 @@
 extends Area2D
 
+signal opened(player, reward_type)
+
 enum RewardType {
 	ARROWS,
 	HEALTH,
@@ -49,7 +51,7 @@ var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var has_initialized: bool = false
 
 func _ready() -> void:
-	rng.randomize()
+	_configure_rng()
 	set_lootable(true)
 	timer.wait_time = timer_length
 	has_initialized = true
@@ -140,6 +142,12 @@ func set_lootable(new_val: bool) -> void:
 		progress.show()
 		loot_label.hide()
 
+func is_lootable() -> bool:
+	return lootable
+
+func get_reward_type() -> int:
+	return current_reward
+
 func apply_effect(player: Player) -> void:
 	match current_reward:
 		RewardType.HEALTH:
@@ -166,9 +174,18 @@ func apply_effect(player: Player) -> void:
 func _on_body_entered(body: Node) -> void:
 	var player := body as Player
 	if lootable and player != null:
+		var reward_type := current_reward
 		apply_effect(player)
 		GameSfx.play(self, &"chest_open", global_position, randf_range(0.98, 1.05))
+		opened.emit(player, reward_type)
 		set_lootable(false)
 
 func _on_regeneration_timeout() -> void:
 	set_lootable(true)
+
+func _configure_rng() -> void:
+	var match_settings = get_node_or_null("/root/MatchSettings")
+	if match_settings != null and match_settings.has_method("build_rng"):
+		rng = match_settings.call("build_rng", "chest:%s" % get_path())
+	else:
+		rng.randomize()

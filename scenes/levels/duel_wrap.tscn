@@ -1,0 +1,44 @@
+[gd_scene format=4 uid="uid://dr7k8w2x5oaqb"]
+
+[ext_resource type="Script" path="res://scripts/gameplay/duel_world.gd" id="1_dwrap"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(1400, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_padleft"]
+size = Vector2(200, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_padright"]
+size = Vector2(200, 18)
+
+[node name="duel_wrap" type="Node2D" unique_id=300001]
+script = ExtResource("1_dwrap")
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=300002]
+
+[node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=300003]
+position = Vector2(220, 360)
+
+[node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=300004]
+position = Vector2(1060, 360)
+
+[node name="RestartTimer" type="Timer" parent="." unique_id=300005]
+one_shot = true
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=300006]
+position = Vector2(640, 572)
+
+[node name="FloorShape" type="CollisionShape2D" parent="Floor" unique_id=300007]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="Pad_Left" type="StaticBody2D" parent="." unique_id=300008]
+position = Vector2(180, 430)
+
+[node name="PadLeftShape" type="CollisionShape2D" parent="Pad_Left" unique_id=300009]
+shape = SubResource("RectangleShape2D_padleft")
+
+[node name="Pad_Right" type="StaticBody2D" parent="." unique_id=300010]
+position = Vector2(1100, 430)
+
+[node name="PadRightShape" type="CollisionShape2D" parent="Pad_Right" unique_id=300011]
+shape = SubResource("RectangleShape2D_padright")

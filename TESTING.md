@@ -36,6 +36,25 @@ flatpak run org.godotengine.Godot --headless --path /home/matthiase/Github/Tower
 
 5. Delete the temporary test script after the run unless it is meant to stay in the repository.
 
+## Permanent AI Smoke Test
+
+The repository now includes a permanent AI smoke test that covers:
+
+- impossible-gap stopping
+- simple-gap jumping
+- chest priority when empty
+- switch priority
+- wall-jump route selection
+- pad steering after launch routing
+- stomp choice in a vertical duel
+- spike avoidance
+
+Run it with:
+
+```bash
+flatpak run org.godotengine.Godot --headless --path /home/matthiase/Github/Towerfall --script res://tests/ai_smoke_test.gd
+```
+
 ## Manual Gameplay Checklist
 
 After gameplay changes, verify the following in-editor:
@@ -44,6 +63,7 @@ After gameplay changes, verify the following in-editor:
 - Each level can be entered from the menu.
 - Both players can move, jump, aim, shoot, and dash.
 - Winner text and restart flow still work after death.
+- Press `F8` in an arena to toggle the AI debug overlay and confirm goal, route, probe, shot, and stomp reasons are updating.
 
 ### Ammo And Pickup Checklist
 

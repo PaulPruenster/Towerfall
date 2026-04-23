@@ -1,0 +1,26 @@
+[gd_scene format=4 uid="uid://do5q3n8r1kp7x"]
+
+[ext_resource type="Script" path="res://scripts/gameplay/duel_world.gd" id="1_dopen"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(1400, 24)
+
+[node name="duel_open" type="Node2D" unique_id=100001]
+script = ExtResource("1_dopen")
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=100002]
+
+[node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=100003]
+position = Vector2(280, 510)
+
+[node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=100004]
+position = Vector2(1000, 510)
+
+[node name="RestartTimer" type="Timer" parent="." unique_id=100005]
+one_shot = true
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=100006]
+position = Vector2(640, 572)
+
+[node name="FloorShape" type="CollisionShape2D" parent="Floor" unique_id=100007]
+shape = SubResource("RectangleShape2D_floor")

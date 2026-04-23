@@ -74,11 +74,13 @@ func _load_texture(path: String) -> Texture2D:
 	if _texture_cache.has(path):
 		return _texture_cache[path]
 
-	var image := Image.new()
-	if image.load(path) != OK:
+	if not ResourceLoader.exists(path, "Texture2D"):
 		return null
 
-	var texture := ImageTexture.create_from_image(image)
+	var texture := load(path) as Texture2D
+	if texture == null:
+		return null
+
 	_texture_cache[path] = texture
 	return texture
 
@@ -157,6 +159,18 @@ func _on_trigger_area_body_entered(body: Node) -> void:
 		return
 
 	_launch_body(character)
+
+func _physics_process(_delta: float) -> void:
+	# body_entered is ignored for ascending bodies (ignore_ascending_bodies = true).
+	# Poll every frame so a body that jumped in while going up still gets launched
+	# once it lands on the plate with velocity.y >= 0.
+	if not is_ready:
+		return
+	for body in trigger_area.get_overlapping_bodies():
+		var character := body as CharacterBody2D
+		if character != null and _can_launch_body(character):
+			_launch_body(character)
+			return
 
 func _on_cooldown_timer_timeout() -> void:
 	_set_ready_state(true)

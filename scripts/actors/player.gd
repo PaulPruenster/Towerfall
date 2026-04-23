@@ -68,6 +68,22 @@ const PLAYER_ANIM_STATE_NAMES := {
 }
 
 signal im_dead
+signal shot_fired(projectile, arrow_type, direction)
+signal damage_taken(source_type, source_actor, lethal, remaining_health)
+signal hud_player_color_changed(player_color: Color)
+signal hud_health_changed(current_health: int)
+signal hud_ammo_changed(normal_ammo: int, special_arrow_type: int, special_ammo: int, total_ammo: int)
+signal hud_dash_changed(available: int, max_count: int, cooldown_remaining: float, cooldown_duration: float)
+signal hud_buffs_changed(
+	triple_shot_count: int,
+	armor_count: int,
+	speed_remaining: float,
+	speed_duration: float,
+	rapid_remaining: float,
+	rapid_duration: float,
+	extra_dash_remaining: float,
+	extra_dash_duration: float
+)
 
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -100,6 +116,7 @@ var last_wall_normal: Vector2 = Vector2.ZERO
 @export var use_button: StringName = &"p1_use"
 @export var jump_button: StringName = &"p1_jump"
 @export var dash_button: StringName = &"p1_dash"
+@export_node_path("Node") var controller_path: NodePath = ^"AIController"
 
 @export var deathParticle: PackedScene
 @export var arrow: PackedScene
@@ -122,8 +139,10 @@ var last_wall_normal: Vector2 = Vector2.ZERO
 @onready var head_collision: CollisionShape2D = $Area2D/Head
 @onready var dash_timer: Timer = $DashTimer
 @onready var dash_cooldown: Timer = $DashCooldown
+@onready var controller: Node = get_node_or_null(controller_path)
 
 var current_arrow: Arrow
+var world_hud_visible: bool = true
 var special_arrow_type: int = Arrow.ArrowType.NORMAL
 var special_arrow_count: int = 0
 var triple_shot_charges: int = 0
@@ -131,7 +150,15 @@ var armor_hits: int = 0
 var speed_boost_time_left: float = 0.0
 var rapid_fire_time_left: float = 0.0
 var extra_dash_time_left: float = 0.0
+var speed_boost_duration_total: float = 0.0
+var rapid_fire_duration_total: float = 0.0
+var extra_dash_duration_total: float = 0.0
 var available_dashes: int = 1
+var _controller_use_pressed: bool = false
+var _controller_jump_pressed: bool = false
+var _controller_dash_pressed: bool = false
+var _using_controller_input: bool = false
+var _current_control_direction: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	if not animated_sprite.animation_finished.is_connected(_on_animated_sprite_2d_animation_finished):
@@ -142,10 +169,45 @@ func _ready() -> void:
 	_update_hud()
 	_update_visual_state()
 	_update_animation(last_aim_direction, true)
+	emit_hud_state()
+
+func set_world_hud_visible(is_visible: bool) -> void:
+	world_hud_visible = is_visible
+	_update_hud()
+
+func emit_hud_state() -> void:
+	hud_player_color_changed.emit(player_color)
+	_emit_health_changed()
+	_emit_ammo_changed()
+	_emit_dash_changed()
+	_emit_buffs_changed()
+
+func _emit_health_changed() -> void:
+	hud_health_changed.emit(health)
+
+func _emit_ammo_changed() -> void:
+	hud_ammo_changed.emit(arrow_count, special_arrow_type, special_arrow_count, get_total_arrow_count())
+
+func _emit_dash_changed() -> void:
+	hud_dash_changed.emit(available_dashes, get_max_dash_count(), dash_cooldown.time_left, dash_cooldown.wait_time)
+
+func _emit_buffs_changed() -> void:
+	hud_buffs_changed.emit(
+		triple_shot_charges,
+		armor_hits,
+		speed_boost_time_left,
+		speed_boost_duration_total,
+		rapid_fire_time_left,
+		rapid_fire_duration_total,
+		extra_dash_time_left,
+		extra_dash_duration_total
+	)
 
 func hurt(
 	hit_direction: Vector2 = Vector2.ZERO,
-	knockback_strength: float = KNOCKBACK_FORCE
+	knockback_strength: float = KNOCKBACK_FORCE,
+	source_type: StringName = &"unknown",
+	source_actor: Node = null
 ) -> bool:
 	if is_dying or hurt_invulnerability_left > 0.0:
 		return false
@@ -156,6 +218,7 @@ func hurt(
 		hurt_invulnerability_left = HURT_INVULNERABILITY * 0.5
 		_request_screen_shake(4.0, 0.08)
 		GameSfx.play(self, &"armor", global_position)
+		_emit_buffs_changed()
 		return false
 
 	hurt_flash_left = HURT_FLASH_TIME
@@ -169,9 +232,12 @@ func hurt(
 		hurt_lock_left = HURT_FLASH_TIME
 		_update_animation(hit_direction, true)
 		_request_hit_stop(HIT_STOP_DURATION, 0.08)
+		_emit_health_changed()
+		damage_taken.emit(source_type, source_actor, false, health)
 		return true
 
 	_request_hit_stop(KILL_HIT_STOP_DURATION, 0.04)
+	damage_taken.emit(source_type, source_actor, true, 0)
 	im_dead.emit()
 
 	if current_arrow:
@@ -208,12 +274,15 @@ func add_arrows(amount: int = 1) -> void:
 	if amount <= 0:
 		return
 	arrow_count += amount
+	_emit_ammo_changed()
 
 func restore_arrows() -> void:
 	arrow_count = max(arrow_count, DEFAULT_ARROW_COUNT)
+	_emit_ammo_changed()
 
 func heal(amount: int = 1) -> void:
 	health += amount
+	_emit_health_changed()
 
 func grant_special_arrows(new_arrow_type: int, charges: int) -> void:
 	if charges <= 0:
@@ -223,26 +292,36 @@ func grant_special_arrows(new_arrow_type: int, charges: int) -> void:
 	else:
 		special_arrow_type = new_arrow_type
 		special_arrow_count = charges
+	_emit_ammo_changed()
 
 func grant_triple_shot(charges: int) -> void:
 	if charges <= 0:
 		return
 	triple_shot_charges += charges
+	_emit_buffs_changed()
 
 func grant_rapid_fire(duration: float) -> void:
 	rapid_fire_time_left = max(rapid_fire_time_left, duration)
+	rapid_fire_duration_total = max(rapid_fire_duration_total, rapid_fire_time_left, duration)
+	_emit_buffs_changed()
 
 func grant_extra_dash(duration: float) -> void:
 	extra_dash_time_left = max(extra_dash_time_left, duration)
+	extra_dash_duration_total = max(extra_dash_duration_total, extra_dash_time_left, duration)
 	available_dashes = get_max_dash_count()
+	_emit_buffs_changed()
+	_emit_dash_changed()
 
 func grant_armor(hits: int) -> void:
 	if hits <= 0:
 		return
 	armor_hits += hits
+	_emit_buffs_changed()
 
 func grant_speed_boost(duration: float) -> void:
 	speed_boost_time_left = max(speed_boost_time_left, duration)
+	speed_boost_duration_total = max(speed_boost_duration_total, speed_boost_time_left, duration)
+	_emit_buffs_changed()
 
 func launch_from_pad(launch_velocity: Vector2, inherit_horizontal_velocity: bool = true) -> void:
 	dashing = false
@@ -258,6 +337,12 @@ func get_loaded_arrow_type() -> int:
 	if special_arrow_count > 0:
 		return special_arrow_type
 	return Arrow.ArrowType.NORMAL
+
+func get_arrow_spawn_position(direction: Vector2) -> Vector2:
+	var normalized_direction := direction.normalized()
+	if normalized_direction == Vector2.ZERO:
+		normalized_direction = last_aim_direction if last_aim_direction != Vector2.ZERO else Vector2.RIGHT
+	return global_position + _get_bow_anchor_offset(normalized_direction) + normalized_direction * ARROW_SPAWN_DISTANCE
 
 func get_max_dash_count() -> int:
 	if extra_dash_time_left > 0.0:
@@ -280,10 +365,12 @@ func _consume_special_arrow() -> void:
 func consume_loaded_arrow(loaded_arrow_type: int) -> void:
 	if loaded_arrow_type != Arrow.ArrowType.NORMAL and special_arrow_count > 0:
 		_consume_special_arrow()
+		_emit_ammo_changed()
 		return
 
 	if arrow_count > 0:
 		arrow_count -= 1
+	_emit_ammo_changed()
 
 func _apply_knockback(hit_direction: Vector2, knockback_strength: float) -> void:
 	var direction := hit_direction.normalized()
@@ -315,6 +402,10 @@ func _update_timed_states(delta: float) -> void:
 	wall_jump_lock_left = max(wall_jump_lock_left - delta, 0.0)
 
 	var previous_max_dashes := get_max_dash_count()
+	var previous_available_dashes := available_dashes
+	var had_speed_boost := speed_boost_time_left > 0.0
+	var had_rapid_fire := rapid_fire_time_left > 0.0
+	var had_extra_dash := extra_dash_time_left > 0.0
 	speed_boost_time_left = max(speed_boost_time_left - delta, 0.0)
 	rapid_fire_time_left = max(rapid_fire_time_left - delta, 0.0)
 	extra_dash_time_left = max(extra_dash_time_left - delta, 0.0)
@@ -323,6 +414,23 @@ func _update_timed_states(delta: float) -> void:
 		available_dashes = get_max_dash_count()
 	elif previous_max_dashes < get_max_dash_count():
 		available_dashes = get_max_dash_count()
+
+	var buffs_changed := false
+	if had_speed_boost and speed_boost_time_left <= 0.0:
+		speed_boost_duration_total = 0.0
+		buffs_changed = true
+	if had_rapid_fire and rapid_fire_time_left <= 0.0:
+		rapid_fire_duration_total = 0.0
+		buffs_changed = true
+	if had_extra_dash and extra_dash_time_left <= 0.0:
+		extra_dash_duration_total = 0.0
+		buffs_changed = true
+
+	if previous_available_dashes != available_dashes or previous_max_dashes != get_max_dash_count():
+		_emit_dash_changed()
+
+	if buffs_changed:
+		_emit_buffs_changed()
 
 func _update_visual_state() -> void:
 	if hurt_flash_left > 0.0:
@@ -344,6 +452,14 @@ func _update_visual_state() -> void:
 func _update_hud() -> void:
 	arrow_count_label.text = str(get_total_arrow_count())
 	health_count_label.text = str(health)
+
+	if not world_hud_visible:
+		arrow_count_label.hide()
+		health_count_label.hide()
+		special_ammo_label.hide()
+		dash_status_label.hide()
+		buff_status_label.hide()
+		return
 
 	if special_arrow_count > 0:
 		special_ammo_label.text = "Next: %s x%d" % [Arrow.get_arrow_name(special_arrow_type), special_arrow_count]
@@ -389,10 +505,84 @@ func _is_aim_locked() -> bool:
 	return aiming or current_arrow != null
 
 func get_input_direction_raw() -> Vector2:
+	if _using_controller_input:
+		return _current_control_direction
 	return Input.get_vector(left_button, right_button, up_button, down_button)
 
-func _get_input_direction() -> Vector2:
-	var direction := Input.get_vector(left_button, right_button, up_button, down_button)
+func _reset_controller_input_state() -> void:
+	_controller_use_pressed = false
+	_controller_jump_pressed = false
+	_controller_dash_pressed = false
+
+func _read_human_control_state() -> Dictionary:
+	_reset_controller_input_state()
+	return {
+		"direction": Input.get_vector(left_button, right_button, up_button, down_button),
+		"use_pressed": Input.is_action_pressed(use_button),
+		"use_just_pressed": Input.is_action_just_pressed(use_button),
+		"use_just_released": Input.is_action_just_released(use_button),
+		"jump_pressed": Input.is_action_pressed(jump_button),
+		"jump_just_pressed": Input.is_action_just_pressed(jump_button),
+		"jump_just_released": Input.is_action_just_released(jump_button),
+		"dash_pressed": Input.is_action_pressed(dash_button),
+		"dash_just_pressed": Input.is_action_just_pressed(dash_button),
+	}
+
+func _read_controller_control_state(delta: float) -> Dictionary:
+	if controller == null or not controller.has_method("get_control_state"):
+		return {}
+
+	var raw_state_variant: Variant = controller.call("get_control_state", delta)
+	if not (raw_state_variant is Dictionary):
+		return {}
+
+	var raw_state: Dictionary = raw_state_variant
+	if not bool(raw_state.get("active", false)):
+		return {}
+
+	var direction_value: Variant = raw_state.get("direction", Vector2.ZERO)
+	var direction: Vector2 = direction_value if direction_value is Vector2 else Vector2.ZERO
+	var use_pressed: bool = bool(raw_state.get("use_pressed", false))
+	var jump_pressed: bool = bool(raw_state.get("jump_pressed", false))
+	var dash_pressed: bool = bool(raw_state.get("dash_pressed", false))
+
+	var use_just_pressed: bool = use_pressed and not _controller_use_pressed
+	var use_just_released: bool = not use_pressed and _controller_use_pressed
+	var jump_just_pressed: bool = jump_pressed and not _controller_jump_pressed
+	var jump_just_released: bool = not jump_pressed and _controller_jump_pressed
+	var dash_just_pressed: bool = dash_pressed and not _controller_dash_pressed
+
+	_controller_use_pressed = use_pressed
+	_controller_jump_pressed = jump_pressed
+	_controller_dash_pressed = dash_pressed
+
+	return {
+		"direction": direction,
+		"use_pressed": use_pressed,
+		"use_just_pressed": use_just_pressed,
+		"use_just_released": use_just_released,
+		"jump_pressed": jump_pressed,
+		"jump_just_pressed": jump_just_pressed,
+		"jump_just_released": jump_just_released,
+		"dash_pressed": dash_pressed,
+		"dash_just_pressed": dash_just_pressed,
+	}
+
+func _read_control_state(delta: float) -> Dictionary:
+	var control_state := _read_controller_control_state(delta)
+	_using_controller_input = not control_state.is_empty()
+	if control_state.is_empty():
+		control_state = _read_human_control_state()
+		_using_controller_input = false
+
+	var direction: Vector2 = control_state.get("direction", Vector2.ZERO)
+	direction = direction.limit_length(1.0)
+	control_state["direction"] = direction
+	_current_control_direction = direction
+	return control_state
+
+func _get_input_direction(raw_direction: Vector2) -> Vector2:
+	var direction := raw_direction
 	if direction != Vector2.ZERO:
 		last_aim_direction = direction.normalized()
 	return direction
@@ -445,7 +635,7 @@ func _clear_preview_arrow() -> void:
 
 func _position_arrow(projectile: Arrow, direction: Vector2) -> void:
 	var normalized_direction := direction.normalized()
-	projectile.global_position = global_position + _get_bow_anchor_offset(normalized_direction) + normalized_direction * ARROW_SPAWN_DISTANCE
+	projectile.global_position = get_arrow_spawn_position(normalized_direction)
 	projectile.direction = normalized_direction
 
 func _get_shot_directions(direction: Vector2) -> Array[Vector2]:
@@ -480,12 +670,14 @@ func _fire_shot(direction: Vector2, preview_arrow: Arrow = null) -> void:
 		projectile.configure(self, loaded_arrow_type)
 		_position_arrow(projectile, shot_directions[index])
 		projectile.shoot()
+		shot_fired.emit(projectile, loaded_arrow_type, shot_directions[index])
 
 	consume_loaded_arrow(loaded_arrow_type)
 	_trigger_shoot_animation(direction)
 
 	if triple_shot_charges > 0:
 		triple_shot_charges -= 1
+		_emit_buffs_changed()
 
 	current_arrow = null
 
@@ -673,18 +865,26 @@ func _physics_process(delta: float) -> void:
 		if velocity.y > 0.0:
 			velocity.y += gravity * delta * (WALL_SLIDE_GRAVITY_FACTOR - 1.0)
 
-	aiming = Input.is_action_pressed(use_button)
+	var control_state := _read_control_state(delta)
+	var input_direction: Vector2 = control_state.get("direction", Vector2.ZERO)
+	var use_pressed := bool(control_state.get("use_pressed", false))
+	var use_just_released := bool(control_state.get("use_just_released", false))
+	var jump_just_pressed := bool(control_state.get("jump_just_pressed", false))
+	var jump_just_released := bool(control_state.get("jump_just_released", false))
+	var dash_just_pressed := bool(control_state.get("dash_just_pressed", false))
+
+	aiming = use_pressed
 
 	if is_on_floor():
 		coyote_time_left = COYOTE_TIME
 
-	if Input.is_action_just_pressed(jump_button) and not aiming:
+	if jump_just_pressed and not aiming:
 		jump_buffer_left = JUMP_BUFFER_TIME
 
-	if Input.is_action_just_released(jump_button) and velocity.y < 0.0:
+	if jump_just_released and velocity.y < 0.0:
 		velocity.y *= SHORT_HOP_FACTOR
 
-	var direction := _get_input_direction()
+	var direction := _get_input_direction(input_direction)
 	var shoot_direction := _get_shoot_direction(direction)
 
 	# Wall jump — runs before ground jump so both share jump_buffer_left
@@ -702,12 +902,13 @@ func _physics_process(delta: float) -> void:
 		jump_buffer_left = 0.0
 		coyote_time_left = 0.0
 
-	if available_dashes > 0 and Input.is_action_just_pressed(dash_button) and direction != Vector2.ZERO:
+	if available_dashes > 0 and dash_just_pressed and direction != Vector2.ZERO:
 		dashing = true
 		available_dashes -= 1
 		dash_timer.start()
 		if available_dashes < get_max_dash_count() and dash_cooldown.is_stopped():
 			dash_cooldown.start()
+		_emit_dash_changed()
 
 	if direction != Vector2.ZERO and not aiming and wall_jump_lock_left <= 0.0:
 		if dashing:
@@ -746,7 +947,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		aim_preview.hide()
 
-	if current_arrow and Input.is_action_just_released(use_button):
+	if current_arrow and use_just_released:
 		if can_shoot(shoot_direction):
 			_fire_shot(shoot_direction, current_arrow)
 		else:
@@ -758,7 +959,7 @@ func _physics_process(delta: float) -> void:
 
 func _on_area_2d_body_entered(body: Node) -> void:
 	if body != self and body.is_in_group("player"):
-		hurt(global_position - (body as Node2D).global_position)
+		hurt(global_position - (body as Node2D).global_position, KNOCKBACK_FORCE, &"body", body)
 
 func _on_dash_timer_timeout() -> void:
 	dashing = false
@@ -771,6 +972,7 @@ func _on_dash_cooldown_timeout() -> void:
 		GameSfx.play(self, &"dash_ready", global_position)
 	if available_dashes < get_max_dash_count():
 		dash_cooldown.start()
+	_emit_dash_changed()
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if is_dying and character_animator.current_animation_name == PLAYER_ANIM_STATE_NAMES[PlayerAnimState.DEATH]:

@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://chqr0wbi22ox"]
+[gd_scene load_steps=13 format=3 uid="uid://chqr0wbi22ox"]
 
 [ext_resource type="Script" path="res://scripts/actors/player.gd" id="1_dmoi7"]
 [ext_resource type="PackedScene" path="res://scenes/effects/explosion.tscn" id="2_hq8pn"]
 [ext_resource type="PackedScene" path="res://scenes/actors/arrow.tscn" id="3_s2ths"]
 [ext_resource type="Script" path="res://scripts/actors/character_animator.gd" id="4_o4a3j"]
+[ext_resource type="Script" path="res://scripts/actors/ai_controller.gd" id="5_b4xg0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v8e8u"]
 size = Vector2(10.5, 20.5)
@@ -49,6 +50,9 @@ shape = SubResource("RectangleShape2D_v8e8u")
 
 [node name="CharacterAnimator" type="Node" parent="."]
 script = ExtResource("4_o4a3j")
+
+[node name="AIController" type="Node" parent="."]
+script = ExtResource("5_b4xg0")
 
 [node name="PlayerMarker" type="Polygon2D" parent="Visuals"]
 position = Vector2(0, -31)

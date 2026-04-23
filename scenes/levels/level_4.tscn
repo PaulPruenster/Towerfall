@@ -1,0 +1,64 @@
+[gd_scene format=4 uid="uid://dptdfmt4k086k"]
+
+[ext_resource type="Script" uid="uid://byx1raxb7t7cp" path="res://scripts/gameplay/world.gd" id="1_8r2xd"]
+[ext_resource type="Texture2D" uid="uid://bekb0sebxo3u5" path="res://assets/generated/backgrounds/level1_background.png" id="1_ts8eg"]
+[ext_resource type="PackedScene" uid="uid://cfr3u6dpjtb7r" path="res://scenes/ui/hud.tscn" id="2_um320"]
+[ext_resource type="PackedScene" uid="uid://dm07xf12fj16u" path="res://scenes/ui/level_overlay.tscn" id="3_glw47"]
+[ext_resource type="PackedScene" uid="uid://bbofq3diudthx" path="res://scenes/gameplay/chest.tscn" id="4_4wsov"]
+[ext_resource type="PackedScene" uid="uid://c7rv5bmdyxay8" path="res://scenes/audio/song_player.tscn" id="5_qvnao"]
+[ext_resource type="TileSet" uid="uid://cxtaon2v0hqbe" path="res://assets/generated/tiles/level1_tileset.tres" id="6_hsvsk"]
+
+[node name="Level4" type="Node2D" unique_id=1406515105]
+script = ExtResource("1_8r2xd")
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=319470595]
+
+[node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=808272229]
+position = Vector2(77, 103)
+
+[node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=958370769]
+position = Vector2(968, 549)
+
+[node name="Spawn3" type="Marker2D" parent="SpawnPoints" unique_id=1844066740]
+position = Vector2(937, 99)
+
+[node name="Spawn4" type="Marker2D" parent="SpawnPoints" unique_id=989892353]
+position = Vector2(128, 548)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1473871323]
+visible = false
+modulate = Color(1, 1, 1, 0.88)
+z_index = -1
+offset_left = -21.0
+offset_top = -37.0
+offset_right = 1586.0
+offset_bottom = 923.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("1_ts8eg")
+
+[node name="RestartTimer" type="Timer" parent="." unique_id=927584895]
+one_shot = true
+
+[node name="HUD" parent="." unique_id=1612862276 instance=ExtResource("2_um320")]
+
+[node name="LevelOverlay" parent="." unique_id=2059103605 instance=ExtResource("3_glw47")]
+visible = false
+
+[node name="Chest2" parent="." unique_id=945316392 instance=ExtResource("4_4wsov")]
+position = Vector2(433, 548)
+
+[node name="SongPlayer" parent="." unique_id=1336811914 instance=ExtResource("5_qvnao")]
+
+[node name="Platforms" type="TileMapLayer" parent="." unique_id=68935538]
+z_index = -1
+use_parent_material = true
+scale = Vector2(2, 2)
+tile_map_data = PackedByteArray("AAAjABIAAAAAAAEAAAAVABIAAAABAAEAAAAWABIAAAABAAEAAAAXABIAAAABAAEAAAAYABIAAAABAAEAAAAZABIAAAABAAEAAAAaABIAAAABAAEAAAAbABIAAAABAAEAAAAcABIAAAABAAEAAAAdABIAAAABAAEAAAAeABIAAAABAAEAAAAfABIAAAABAAEAAAAgABIAAAABAAEAAAAhABIAAAABAAEAAAAiABIAAAABAAEAAAAKABIAAAABAAEAAAALABIAAAABAAEAAAAMABIAAAABAAEAAAANABIAAAABAAEAAAADABIAAAABAAEAAAAEABIAAAABAAEAAAAFABIAAAABAAEAAAAGABIAAAABAAEAAAAHABIAAAABAAEAAAAIABIAAAABAAEAAAAJABIAAAABAAEAAAACABIAAAABAAAAAAASABIAAAABAAEAAAATABIAAAABAAEAAAARABIAAAABAAEAAAAPABIAAAABAAEAAAAQABIAAAABAAEAAAAOABIAAAABAAEAAAAUABIAAAABAAEAAAAhAA8AAAAKAA4AAAAhAA4AAAAGAA4AAAAhAA0AAAAGAA4AAAAhAAwAAAAGAA4AAAAhAAsAAAAGAA4AAAAhAAoAAAAGAA4AAAAhAAkAAAAGAA4AAAAhAAgAAAAGAA4AAAAhAAcAAAAGAA4AAAAhAAYAAAAGAA4AAAAeAAQAAAADAAMAAAAdAAQAAAADAAMAAAAcAAQAAAADAAMAAAAbAAQAAAADAAMAAAAaAAQAAAADAAMAAAAZAAQAAAADAAMAAAAYAAQAAAADAAMAAAAXAAQAAAADAAMAAAAWAAQAAAADAAMAAAAVAAQAAAADAAMAAAAUAAQAAAADAAMAAAATAAQAAAADAAMAAAASAAQAAAADAAMAAAARAAQAAAADAAMAAAAQAAQAAAADAAMAAAAPAAQAAAADAAMAAAAOAAQAAAADAAMAAAANAAQAAAADAAMAAAAMAAQAAAADAAMAAAALAAQAAAADAAMAAAAKAAQAAAADAAMAAAAJAAQAAAADAAMAAAAIAAQAAAADAAMAAAAHAAQAAAADAAMAAAAGAAQAAAADAAMAAAAFAAQAAAADAAMAAAAEAAQAAAADAAMAAAADAAQAAAADAAMAAAACAAQAAAADAAMAAAABAAQAAAADAAMAAAAAAAQAAAADAAMAAAAAABIAAAADAAMAAAABABIAAAADAAMAAAAhAAUAAAAHAAUAAAAhAAQAAAAHAAUAAAAhAAMAAAAHAAUAAAAhAAIAAAAHAAUAAAAhAAEAAAAHAAUAAAA=")
+tile_set = ExtResource("6_hsvsk")
+
+[node name="AIRoutes" type="Node2D" parent="." unique_id=900945260]
+
+[node name="Chest3" parent="." unique_id=647443612 instance=ExtResource("4_4wsov")]
+position = Vector2(425, 100)
+
+[connection signal="timeout" from="RestartTimer" to="." method="_on_timer_timeout"]

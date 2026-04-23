@@ -1,0 +1,88 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/ai_debug_overlay.gd" id="1_7hf81"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.07, 0.09, 0.14, 0.97)
+border_width_left = 1
+border_color = Color(0.258824, 0.678431, 0.894118, 0.45)
+
+[node name="AIDebugOverlay" type="CanvasLayer"]
+visible = false
+layer = 12
+script = ExtResource("1_7hf81")
+
+[node name="DebugWindow" type="Window" parent="."]
+visible = false
+title = "AI Observer  (F7)"
+initial_position = 2
+size = Vector2i(460, 720)
+min_size = Vector2i(260, 300)
+always_on_top = true
+wrap_controls = true
+borderless = false
+unresizable = false
+
+[node name="ContentPanel" type="PanelContainer" parent="DebugWindow"]
+layout_mode = 1
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="OuterMargin" type="MarginContainer" parent="DebugWindow/ContentPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="RootVBox" type="VBoxContainer" parent="DebugWindow/ContentPanel/OuterMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="DebugWindow/ContentPanel/OuterMargin/RootVBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="DebugWindow/ContentPanel/OuterMargin/RootVBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "AI Observer"
+
+[node name="HintLabel" type="Label" parent="DebugWindow/ContentPanel/OuterMargin/RootVBox/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.584314, 0.643137, 0.737255, 0.8)
+theme_override_font_sizes/font_size = 12
+text = "F7 to close"
+
+[node name="Separator" type="HSeparator" parent="DebugWindow/ContentPanel/OuterMargin/RootVBox"]
+layout_mode = 2
+theme_override_colors/separator_color = Color(0.258824, 0.678431, 0.894118, 0.3)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="DebugWindow/ContentPanel/OuterMargin/RootVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="CardsVBox" type="VBoxContainer" parent="DebugWindow/ContentPanel/OuterMargin/RootVBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="NoAILabel" type="Label" parent="DebugWindow/ContentPanel/OuterMargin/RootVBox/ScrollContainer/CardsVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.584314, 0.643137, 0.737255, 0.8)
+theme_override_font_sizes/font_size = 13
+text = "No AI players in this match."
+
+[connection signal="close_requested" from="DebugWindow" to="." method="_on_debug_window_close_requested"]

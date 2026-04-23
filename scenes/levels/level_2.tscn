@@ -1,6 +1,5 @@
 [gd_scene format=4 uid="uid://bcb2snb3r6llu"]
 
-[ext_resource type="PackedScene" uid="uid://chqr0wbi22ox" path="res://scenes/actors/player.tscn" id="1_miyu1"]
 [ext_resource type="Script" uid="uid://byx1raxb7t7cp" path="res://scripts/gameplay/world.gd" id="1_o8w0s"]
 [ext_resource type="PackedScene" uid="uid://dt3u4l3juvvwr" path="res://scenes/gameplay/spikes.tscn" id="3_5r0u2"]
 [ext_resource type="PackedScene" path="res://scenes/gameplay/moving_platform.tscn" id="4_n1j4d"]
@@ -8,24 +7,27 @@
 [ext_resource type="PackedScene" path="res://scenes/gameplay/pressure_switch.tscn" id="6_e5c88"]
 [ext_resource type="TileSet" uid="uid://cxtaon2v0hqbe" path="res://assets/generated/tiles/level1_tileset.tres" id="7_ibugp"]
 [ext_resource type="PackedScene" uid="uid://bbofq3diudthx" path="res://scenes/gameplay/chest.tscn" id="8_8qukl"]
+[ext_resource type="PackedScene" uid="uid://dm07xf12fj16u" path="res://scenes/ui/level_overlay.tscn" id="9_onoq3"]
+[ext_resource type="PackedScene" uid="uid://cfr3u6dpjtb7r" path="res://scenes/ui/hud.tscn" id="10_qc7bu"]
+[ext_resource type="Script" uid="uid://boe1nfcw6t5sg" path="res://scripts/gameplay/ai_route_point.gd" id="11_jd4vh"]
+[ext_resource type="Script" uid="uid://cmur512xler38" path="res://scripts/gameplay/ai_route_link.gd" id="12_2t8v0"]
 
 [node name="Level2" type="Node2D" unique_id=35890786]
 script = ExtResource("1_o8w0s")
 
-[node name="Player1" parent="." unique_id=506597843 instance=ExtResource("1_miyu1")]
-position = Vector2(263, 108)
-player_color = Color(0, 1, 0, 1)
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=179487119]
 
-[node name="Player2" parent="." unique_id=595273974 instance=ExtResource("1_miyu1")]
+[node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=937631219]
+position = Vector2(263, 108)
+
+[node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=2045729701]
 position = Vector2(976, 427)
-player_color = Color(1, 0, 0, 1)
-left_button = "p2_left"
-right_button = "p2_right"
-up_button = "p2_up"
-down_button = "p2_down"
-use_button = "p2_use"
-jump_button = "p2_jump"
-dash_button = "p2_dash"
+
+[node name="Spawn3" type="Marker2D" parent="SpawnPoints" unique_id=1665325766]
+position = Vector2(416, 516)
+
+[node name="Spawn4" type="Marker2D" parent="SpawnPoints" unique_id=1029354732]
+position = Vector2(674, 100)
 
 [node name="Spikes" parent="." unique_id=1216912148 instance=ExtResource("3_5r0u2")]
 position = Vector2(578, 448)
@@ -51,18 +53,10 @@ target_nodes = Array[NodePath]([NodePath("../GateLeft"), NodePath("../GateRight"
 [node name="RestartTimer" type="Timer" parent="." unique_id=1347368440]
 one_shot = true
 
-[node name="Label" type="Label" parent="." unique_id=1367687794]
-offset_left = -2.0
-offset_top = -1.0
-offset_right = 1150.0
-offset_bottom = 152.0
-size_flags_horizontal = 4
-size_flags_vertical = 6
-theme_override_colors/font_color = Color(0.741176, 0.203922, 1, 1)
-theme_override_font_sizes/font_size = 30
-text = "Towerfall"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="HUD" parent="." unique_id=1378651025 instance=ExtResource("10_qc7bu")]
+
+[node name="LevelOverlay" parent="." unique_id=1262326844 instance=ExtResource("9_onoq3")]
+visible = false
 
 [node name="Platforms" type="TileMapLayer" parent="." unique_id=1840980831]
 z_index = -1
@@ -88,6 +82,52 @@ scale = Vector2(0.41, 1)
 position = Vector2(784, 225)
 scale = Vector2(0.403, 1)
 
-[connection signal="im_dead" from="Player1" to="." method="_on_player_1_im_dead"]
-[connection signal="im_dead" from="Player2" to="." method="_on_player_2_im_dead"]
+[node name="AIRoutes" type="Node2D" parent="." unique_id=69698996]
+
+[node name="BottomLeft" type="Marker2D" parent="AIRoutes" unique_id=762626299]
+position = Vector2(364, 516)
+script = ExtResource("11_jd4vh")
+
+[node name="BottomRight" type="Marker2D" parent="AIRoutes" unique_id=927371644]
+position = Vector2(783, 516)
+script = ExtResource("11_jd4vh")
+
+[node name="GateLeftEntry" type="Marker2D" parent="AIRoutes" unique_id=698087887]
+position = Vector2(194, 398)
+script = ExtResource("11_jd4vh")
+
+[node name="ToGateRightEntry" type="Node" parent="AIRoutes/GateLeftEntry" unique_id=1677830808]
+script = ExtResource("12_2t8v0")
+target_point_path = NodePath("../../GateRightEntry")
+traversal_type = 5
+activation_distance = 40.0
+helper_node_path = NodePath("../../../GateLeft")
+
+[node name="GateRightEntry" type="Marker2D" parent="AIRoutes" unique_id=515071944]
+position = Vector2(896, 78)
+script = ExtResource("11_jd4vh")
+
+[node name="ToGateLeftEntry" type="Node" parent="AIRoutes/GateRightEntry" unique_id=1361619044]
+script = ExtResource("12_2t8v0")
+target_point_path = NodePath("../../GateLeftEntry")
+traversal_type = 5
+activation_distance = 40.0
+helper_node_path = NodePath("../../../GateRight")
+
+[node name="TopLeft" type="Marker2D" parent="AIRoutes" unique_id=356984169]
+position = Vector2(263, 108)
+script = ExtResource("11_jd4vh")
+
+[node name="TopSwitch" type="Marker2D" parent="AIRoutes" unique_id=249945262]
+position = Vector2(524, 121)
+script = ExtResource("11_jd4vh")
+
+[node name="TopRight" type="Marker2D" parent="AIRoutes" unique_id=1400845992]
+position = Vector2(622, 100)
+script = ExtResource("11_jd4vh")
+
+[node name="ToGateRightEntry" type="Node" parent="AIRoutes/TopRight" unique_id=1325588557]
+script = ExtResource("12_2t8v0")
+target_point_path = NodePath("../../GateRightEntry")
+
 [connection signal="timeout" from="RestartTimer" to="." method="_on_timer_timeout"]

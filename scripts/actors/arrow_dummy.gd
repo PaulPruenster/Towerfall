@@ -5,10 +5,14 @@ const PICKUP_TEXTURE_PATH: String = "res://assets/generated/arrows/arrow_pickup.
 @onready var sprite: Sprite2D = $Sprite2D
 
 func _ready() -> void:
-	var image := Image.new()
-	if image.load(PICKUP_TEXTURE_PATH) != OK:
+	if not ResourceLoader.exists(PICKUP_TEXTURE_PATH, "Texture2D"):
 		return
-	sprite.texture = ImageTexture.create_from_image(image)
+
+	var texture := load(PICKUP_TEXTURE_PATH) as Texture2D
+	if texture == null:
+		return
+
+	sprite.texture = texture
 
 func _on_body_entered(body: Node) -> void:
 	var player := body as Player

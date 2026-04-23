@@ -129,5 +129,5 @@ func _on_body_entered(body: Node) -> void:
 	if player != null:
 		_refresh_spikes()
 		GameSfx.play(self, &"hazard", global_position)
-		if player.hurt(hit_direction, knockback_force):
+		if player.hurt(hit_direction, knockback_force, &"spikes", self):
 			_mark_spike_bloodied(_get_nearest_spike_index(player.global_position))
