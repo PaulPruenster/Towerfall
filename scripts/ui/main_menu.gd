@@ -147,7 +147,6 @@ func _ready() -> void:
 
 	for button in level_details.keys():
 		button.focus_entered.connect(_select_level.bind(button))
-		button.mouse_entered.connect(_select_level.bind(button))
 
 	_refresh_match_setup()
 	_populate_watch_levels()
@@ -315,7 +314,6 @@ func _populate_watch_levels() -> void:
 		button.disabled = false
 		button.text = str(data.get("title", ""))
 		button.focus_entered.connect(_select_watch_level.bind(button))
-		button.mouse_entered.connect(_select_watch_level.bind(button))
 		button.set_pressed_no_signal(false)
 		watch_level_details[button] = data
 		watch_level_buttons.append(button)
