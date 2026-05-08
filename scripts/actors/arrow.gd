@@ -11,6 +11,7 @@ enum ArrowType {
 	EXPLOSIVE,
 	RICOCHET,
 	STRAIGHT,
+	WARP,
 }
 
 enum ArrowVisualState {
@@ -21,6 +22,7 @@ enum ArrowVisualState {
 
 const ARROW_DUMMY: PackedScene = preload("res://scenes/actors/arrow_dummy.tscn")
 const EXPLOSION_EFFECT: PackedScene = preload("res://scenes/effects/explosion.tscn")
+const WARP_FIELD_EFFECT: PackedScene = preload("res://scenes/effects/warp_field_effect.tscn")
 const NORMAL_TEXTURE_PATH: String = "res://assets/generated/arrows/arrow_normal.png"
 const EXPLOSIVE_TEXTURE_PATH: String = "res://assets/generated/arrows/arrow_bomb.png"
 const RICOCHET_TEXTURE_PATH: String = "res://assets/generated/arrows/arrow_bounce.png"
@@ -29,6 +31,12 @@ const ARROW_ASSET_DIR: String = "res://assets/generated/arrows"
 const ARROW_PLACEHOLDER_SIZE: Vector2i = Vector2i(12, 24)
 const EXPLOSION_RADIUS: float = 80.0
 const EXPLOSION_SCALE: Vector2 = Vector2(0.45, 0.45)
+const SCREEN_EFFECT_Z_INDEX: int = 50
+const WARP_FLIGHT_FIELD_SIZE: Vector2 = Vector2(220.0, 220.0)
+const WARP_IMPACT_FIELD_SIZE: Vector2 = Vector2(260.0, 260.0)
+const WARP_IMPACT_DURATION: float = 5.0
+const WARP_IMPACT_GROW_AMOUNT: float = 0.22
+const BLACK_HOLE_PULL_FORCE: float = 6.0
 const MAX_RICOCHETS: int = 4
 const SHOOTER_COLLISION_ARM_DISTANCE: float = 48.0
 const FLIGHT_FRAME_COUNT: int = 4
@@ -47,6 +55,7 @@ const ARROW_VARIANT_NAMES := {
 	ArrowType.EXPLOSIVE: "bomb",
 	ArrowType.RICOCHET: "bounce",
 	ArrowType.STRAIGHT: "normal",
+	ArrowType.WARP: "normal",
 }
 
 @export var direction: Vector2 = Vector2.ZERO
@@ -64,6 +73,7 @@ var shooter: Player
 var ricochets_left: int = 0
 var shooter_collision_armed: bool = false
 var visual_state: int = ArrowVisualState.FLIGHT
+var warp_field_effect: WarpFieldEffect
 
 static var _texture_cache: Dictionary = {}
 static var _sprite_frames_cache: Dictionary = {}
@@ -77,6 +87,8 @@ static func get_arrow_name(new_arrow_type: int) -> String:
 			return "Bounce"
 		ArrowType.STRAIGHT:
 			return "Straight"
+		ArrowType.WARP:
+			return "Warp"
 		_:
 			return "Normal"
 
@@ -88,6 +100,8 @@ static func get_arrow_color(new_arrow_type: int) -> Color:
 			return Color("#45e0ff")
 		ArrowType.STRAIGHT:
 			return Color("#c8ff72")
+		ArrowType.WARP:
+			return Color("#8ff7ff")
 		_:
 			return Color.WHITE
 
@@ -99,6 +113,8 @@ static func get_gravity_scale_for_type(new_arrow_type: int) -> float:
 			return 0.00012
 		ArrowType.STRAIGHT:
 			return 0.0
+		ArrowType.WARP:
+			return 0.00008
 		_:
 			return 0.0002
 
@@ -108,6 +124,8 @@ static func get_speed_for_type(base_speed: float, new_arrow_type: int) -> float:
 			return base_speed * 0.85
 		ArrowType.RICOCHET:
 			return base_speed * 1.1
+		ArrowType.WARP:
+			return base_speed * 0.38
 		_:
 			return base_speed
 
@@ -147,6 +165,7 @@ func shoot() -> void:
 		add_collision_exception_with(current_shooter)
 	trail_particles.show()
 	collision.disabled = false
+	_ensure_flight_effect()
 	_play_visual_state(ArrowVisualState.FLIGHT, true)
 
 func get_shooter() -> Player:
@@ -228,6 +247,8 @@ func _get_texture_for_type(new_arrow_type: int) -> Texture2D:
 			return _load_texture_with_fallback(RICOCHET_TEXTURE_PATH)
 		ArrowType.STRAIGHT:
 			return _load_texture_with_fallback(STRAIGHT_TEXTURE_PATH)
+		ArrowType.WARP:
+			return _load_texture_with_fallback(NORMAL_TEXTURE_PATH)
 		_:
 			return _load_texture_with_fallback(NORMAL_TEXTURE_PATH)
 
@@ -278,6 +299,17 @@ func _get_gravity_scale() -> float:
 func _get_speed() -> float:
 	return get_speed_for_type(speed, arrow_type)
 
+func apply_black_hole_pull(center: Vector2, normalized_strength: float, delta: float) -> void:
+	if not active or normalized_strength <= 0.0:
+		return
+
+	var offset := center - global_position
+	var distance := offset.length()
+	if distance <= 0.001:
+		return
+
+	direction += (offset / distance) * BLACK_HOLE_PULL_FORCE * normalized_strength * delta
+
 func _spawn_dummy() -> void:
 	var dummy := ARROW_DUMMY.instantiate() as Area2D
 	dummy.global_position = global_position
@@ -295,7 +327,61 @@ func _spawn_explosion_effect() -> void:
 	scene_root.add_child(explosion)
 	explosion.emitting = true
 
+func _spawn_scene_effect(effect_scene: PackedScene, effect_z_index: int = SCREEN_EFFECT_Z_INDEX) -> Node2D:
+	var effect := effect_scene.instantiate() as Node2D
+	if effect == null:
+		return null
+	effect.top_level = true
+	effect.z_as_relative = false
+	effect.z_index = effect_z_index
+	var scene_root := get_tree().current_scene
+	if scene_root == null:
+		scene_root = get_tree().root
+	scene_root.add_child(effect)
+	return effect
+
+func _ensure_flight_effect() -> void:
+	if arrow_type != ArrowType.WARP:
+		return
+	if warp_field_effect != null and is_instance_valid(warp_field_effect):
+		return
+
+	warp_field_effect = _spawn_scene_effect(WARP_FIELD_EFFECT) as WarpFieldEffect
+	if warp_field_effect == null:
+		return
+	warp_field_effect.set_field_size(WARP_FLIGHT_FIELD_SIZE)
+	warp_field_effect.set_effect_opacity(1.0)
+	warp_field_effect.grow_amount = WARP_IMPACT_GROW_AMOUNT
+	warp_field_effect.attach_to_target(self)
+
+func _release_lingering_effect(effect: Node2D, duration: float) -> void:
+	if effect == null or not is_instance_valid(effect):
+		return
+	if effect.has_method("release"):
+		effect.call("release", duration)
+		return
+	if effect.has_method("start_decay"):
+		effect.call("start_decay", duration)
+		return
+	effect.queue_free()
+
+func _release_warp_field() -> void:
+	if warp_field_effect == null or not is_instance_valid(warp_field_effect):
+		warp_field_effect = null
+		return
+	warp_field_effect.set_field_size(WARP_IMPACT_FIELD_SIZE)
+	_release_lingering_effect(warp_field_effect, WARP_IMPACT_DURATION)
+	warp_field_effect = null
+
+func _clear_warp_field() -> void:
+	if warp_field_effect == null or not is_instance_valid(warp_field_effect):
+		warp_field_effect = null
+		return
+	warp_field_effect.queue_free()
+	warp_field_effect = null
+
 func _explode() -> void:
+	_clear_warp_field()
 	_spawn_explosion_effect()
 	GameSfx.play(self, &"explosion", global_position, randf_range(0.96, 1.03))
 	var scene := get_tree().current_scene
@@ -313,10 +399,14 @@ func _explode() -> void:
 	exploded.emit(current_shooter, arrow_type, hit_players)
 	queue_free()
 
-func _begin_impact(new_state: int, spawn_dummy: bool) -> void:
+func _begin_impact(new_state: int, spawn_dummy: bool, leave_lingering_effect: bool = false) -> void:
 	active = false
 	collision.disabled = true
 	trail_particles.hide()
+	if leave_lingering_effect:
+		_release_warp_field()
+	else:
+		_clear_warp_field()
 	if spawn_dummy:
 		_spawn_dummy()
 	_play_visual_state(new_state, true)
@@ -345,7 +435,7 @@ func _handle_collision(collision_info: KinematicCollision2D) -> void:
 		GameSfx.play(self, &"arrow_hit", global_position, randf_range(0.95, 1.05))
 		if player.hurt(direction.normalized(), 360.0, &"arrow", current_shooter):
 			hit_player.emit(player, current_shooter, arrow_type)
-		_begin_impact(ArrowVisualState.HIT_ENEMY, false)
+		_begin_impact(ArrowVisualState.HIT_ENEMY, false, false)
 		return
 
 	if arrow_type == ArrowType.RICOCHET and ricochets_left > 0:
@@ -362,7 +452,7 @@ func _handle_collision(collision_info: KinematicCollision2D) -> void:
 
 	GameSfx.play(self, &"arrow_hit", global_position, randf_range(0.9, 1.0))
 	hit_wall.emit(current_shooter, arrow_type)
-	_begin_impact(ArrowVisualState.HIT_WALL, true)
+	_begin_impact(ArrowVisualState.HIT_WALL, true, arrow_type == ArrowType.WARP)
 
 func _physics_process(delta: float) -> void:
 	rotation = atan2(direction.x, -direction.y)
@@ -382,3 +472,6 @@ func _physics_process(delta: float) -> void:
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if visual_state == ArrowVisualState.HIT_WALL or visual_state == ArrowVisualState.HIT_ENEMY:
 		queue_free()
+
+func _exit_tree() -> void:
+	_clear_warp_field()

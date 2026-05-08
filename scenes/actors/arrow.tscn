@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ci80vsl1gccld"]
+[gd_scene load_steps=10 format=3 uid="uid://ci80vsl1gccld"]
 
 [ext_resource type="Script" path="res://scripts/actors/arrow.gd" id="1_qpdqc"]
 [ext_resource type="Texture2D" path="res://assets/generated/arrows/arrow_normal.png" id="2_5h4w6"]
@@ -43,7 +43,7 @@ animations = [{
 "speed": 8.0
 }]
 
-[node name="Arrow" type="CharacterBody2D"]
+[node name="Arrow" type="CharacterBody2D" groups=["black_hole_pullable"]]
 script = ExtResource("1_qpdqc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

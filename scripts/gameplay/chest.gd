@@ -8,6 +8,7 @@ enum RewardType {
 	EXPLOSIVE,
 	RICOCHET,
 	STRAIGHT,
+	WARP,
 	TRIPLE_SHOT,
 	RAPID_FIRE,
 	EXTRA_DASH,
@@ -21,6 +22,7 @@ const REWARD_WEIGHTS := {
 	RewardType.EXPLOSIVE: 2,
 	RewardType.RICOCHET: 2,
 	RewardType.STRAIGHT: 2,
+	RewardType.WARP: 2,
 	RewardType.TRIPLE_SHOT: 2,
 	RewardType.RAPID_FIRE: 2,
 	RewardType.EXTRA_DASH: 2,
@@ -32,12 +34,13 @@ const REWARD_WEIGHTS := {
 @export var explosive_charges: int = 2
 @export var ricochet_charges: int = 3
 @export var straight_charges: int = 4
+@export var warp_charges: int = 4
 @export var triple_shot_charges: int = 3
 @export var rapid_fire_duration: float = 5.0
 @export var extra_dash_duration: float = 8.0
 @export var armor_hits: int = 1
 @export var speed_boost_duration: float = 6.0
-@export_enum("Random:-1", "Arrows:0", "Health:1", "Bomb:2", "Bounce:3", "Triple Shot:4", "Rapid Fire:5", "Extra Dash:6", "Armor:7", "Speed:8") var reward_override: int = -1
+@export_enum("Random:-1", "Arrows:0", "Health:1", "Bomb:2", "Bounce:3", "Straight:4", "Warp:5", "Triple Shot:6", "Rapid Fire:7", "Extra Dash:8", "Armor:9", "Speed:10") var reward_override: int = 5
 
 @onready var timer: Timer = $Regeneration
 @onready var particles: GPUParticles2D = $Recharged
@@ -85,6 +88,8 @@ func _get_reward_name() -> String:
 			return "BOUNCE x%d" % ricochet_charges
 		RewardType.STRAIGHT:
 			return "STRAIGHT x%d" % straight_charges
+		RewardType.WARP:
+			return "WARP x%d" % warp_charges
 		RewardType.TRIPLE_SHOT:
 			return "TRIPLE x%d" % triple_shot_charges
 		RewardType.RAPID_FIRE:
@@ -108,6 +113,8 @@ func _get_reward_color() -> Color:
 			return Arrow.get_arrow_color(Arrow.ArrowType.RICOCHET)
 		RewardType.STRAIGHT:
 			return Arrow.get_arrow_color(Arrow.ArrowType.STRAIGHT)
+		RewardType.WARP:
+			return Arrow.get_arrow_color(Arrow.ArrowType.WARP)
 		RewardType.TRIPLE_SHOT:
 			return Color("#fff078")
 		RewardType.RAPID_FIRE:
@@ -158,6 +165,8 @@ func apply_effect(player: Player) -> void:
 			player.grant_special_arrows(Arrow.ArrowType.RICOCHET, ricochet_charges)
 		RewardType.STRAIGHT:
 			player.grant_special_arrows(Arrow.ArrowType.STRAIGHT, straight_charges)
+		RewardType.WARP:
+			player.grant_special_arrows(Arrow.ArrowType.WARP, warp_charges)
 		RewardType.TRIPLE_SHOT:
 			player.grant_triple_shot(triple_shot_charges)
 		RewardType.RAPID_FIRE:

@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bok7qyfo5ubj1"]
+[gd_scene format=3 uid="uid://bok7qyfo5ubj1"]
 
-[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_itg5k"]
-[ext_resource type="Texture2D" path="res://assets/generated/backgrounds/level1_background.png" id="2_v2q1r"]
+[ext_resource type="Script" uid="uid://cavadg78dt4jt" path="res://scripts/ui/main_menu.gd" id="1_itg5k"]
+[ext_resource type="Texture2D" uid="uid://bekb0sebxo3u5" path="res://assets/generated/backgrounds/level1_background.png" id="2_v2q1r"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shell"]
 bg_color = Color(0.0431373, 0.0509804, 0.0901961, 0.9)
@@ -16,18 +16,6 @@ corner_radius_bottom_right = 22
 corner_radius_bottom_left = 22
 shadow_color = Color(0, 0, 0, 0.42)
 shadow_size = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
-bg_color = Color(0.0784314, 0.0901961, 0.145098, 0.92)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.94902, 0.623529, 0.266667, 0.45)
-corner_radius_top_left = 18
-corner_radius_top_right = 18
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
 bg_color = Color(0.137255, 0.160784, 0.239216, 1)
@@ -53,7 +41,19 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("first_focus")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.0784314, 0.0901961, 0.145098, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.94902, 0.623529, 0.266667, 0.45)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[node name="MainMenu" type="Control" unique_id=718372420 node_paths=PackedStringArray("first_focus")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,18 +63,18 @@ grow_vertical = 2
 script = ExtResource("1_itg5k")
 first_focus = NodePath("OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel/HomeActions/HomePrimaryButton")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=1522243887]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("2_v2q1r")
 expand_mode = 1
 stretch_mode = 6
-texture = ExtResource("2_v2q1r")
 
-[node name="BackdropTint" type="ColorRect" parent="."]
+[node name="BackdropTint" type="ColorRect" parent="." unique_id=937685609]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,16 +83,17 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0196078, 0.0235294, 0.0431373, 0.78)
 
-[node name="AccentGlowTop" type="ColorRect" parent="."]
+[node name="AccentGlowTop" type="ColorRect" parent="." unique_id=241580036]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
 offset_bottom = 150.0
 grow_horizontal = 2
 color = Color(0.258824, 0.678431, 0.894118, 0.12)
 
-[node name="AccentGlowBottom" type="ColorRect" parent="."]
+[node name="AccentGlowBottom" type="ColorRect" parent="." unique_id=339694025]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 12
@@ -104,7 +105,7 @@ grow_horizontal = 2
 grow_vertical = 0
 color = Color(0.94902, 0.623529, 0.266667, 0.1)
 
-[node name="OuterMargin" type="MarginContainer" parent="."]
+[node name="OuterMargin" type="MarginContainer" parent="." unique_id=1690694605]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -116,45 +117,45 @@ theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 12
 
-[node name="CenterContainer" type="CenterContainer" parent="OuterMargin"]
+[node name="CenterContainer" type="CenterContainer" parent="OuterMargin" unique_id=157210329]
 layout_mode = 2
 
-[node name="Shell" type="PanelContainer" parent="OuterMargin/CenterContainer"]
+[node name="Shell" type="PanelContainer" parent="OuterMargin/CenterContainer" unique_id=841771228]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(560, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_shell")
 
-[node name="ShellMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell"]
+[node name="ShellMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell" unique_id=266882050]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 14
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 14
 
-[node name="Layout" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin"]
+[node name="Layout" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin" unique_id=914245308]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Sidebar" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout"]
+[node name="Sidebar" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout" unique_id=829507251]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Eyebrow" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar"]
+[node name="Eyebrow" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar" unique_id=553730538]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.258824, 0.678431, 0.894118, 1)
 theme_override_font_sizes/font_size = 12
 text = "LOCAL DUELS"
 
-[node name="Title" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar"]
+[node name="Title" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar" unique_id=1644269468]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.972549, 0.921569, 1)
 theme_override_font_sizes/font_size = 22
 text = "Towerfall"
 
-[node name="Tagline" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar"]
+[node name="Tagline" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar" unique_id=783314875]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.788235, 0.870588, 0.94)
@@ -162,84 +163,84 @@ theme_override_font_sizes/font_size = 14
 text = "Compact front-end, fast arena entry, no oversized splash screen."
 autowrap_mode = 3
 
-[node name="NavButtons" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar"]
+[node name="NavButtons" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar" unique_id=417056282]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="HomeNavButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar/NavButtons"]
+[node name="HomeNavButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar/NavButtons" unique_id=895257726]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Home"
 
-[node name="PlayNavButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar/NavButtons"]
+[node name="PlayNavButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar/NavButtons" unique_id=1571723072]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Play"
 
-[node name="ControlsNavButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar/NavButtons"]
+[node name="ControlsNavButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar/NavButtons" unique_id=1118423779]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Controls"
 
-[node name="WatchNavButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar/NavButtons"]
+[node name="WatchNavButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar/NavButtons" unique_id=2100508613]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Watch"
 
-[node name="QuitButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar/NavButtons"]
+[node name="QuitButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar/NavButtons" unique_id=1752688462]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "Quit"
 
-[node name="SidebarSpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar"]
+[node name="SidebarSpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar" unique_id=1632379984]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SidebarHint" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar"]
+[node name="SidebarHint" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar" unique_id=1417701294]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.584314, 0.643137, 0.737255, 0.9)
@@ -247,24 +248,24 @@ theme_override_font_sizes/font_size = 12
 text = "Esc backs out of submenus."
 autowrap_mode = 3
 
-[node name="ContentCard" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout"]
+[node name="ContentCard" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout" unique_id=1434890882]
 custom_minimum_size = Vector2(0, 260)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 
-[node name="ContentMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard"]
+[node name="ContentMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard" unique_id=2038338144]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Pages" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin"]
-layout_mode = 2
+[node name="Pages" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin" unique_id=965382166]
 custom_minimum_size = Vector2(0, 280)
+layout_mode = 2
 
-[node name="HomePanel" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages"]
+[node name="HomePanel" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages" unique_id=156198966]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -274,82 +275,84 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 14
 
-[node name="HomeEyebrow" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel"]
+[node name="HomeEyebrow" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel" unique_id=742896554]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.94902, 0.623529, 0.266667, 1)
 theme_override_font_sizes/font_size = 12
 text = "HOME"
 
-[node name="HomeTitle" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel"]
+[node name="HomeTitle" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel" unique_id=31895622]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.972549, 0.921569, 1)
 theme_override_font_sizes/font_size = 26
 text = "Menu"
 
-[node name="HomeBody" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel"]
+[node name="HomeBody" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel" unique_id=476647340]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.788235, 0.870588, 0.96)
 theme_override_font_sizes/font_size = 14
 text = "Pick a menu."
 autowrap_mode = 3
 
-[node name="HomeSummary" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel"]
+[node name="HomeSummary" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel" unique_id=38117619]
 visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_button")
 
-[node name="HomeSummaryMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel/HomeSummary"]
+[node name="HomeSummaryMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel/HomeSummary" unique_id=1543493892]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 14
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 14
 
-[node name="HomeSummaryText" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel/HomeSummary/HomeSummaryMargin"]
+[node name="HomeSummaryText" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel/HomeSummary/HomeSummaryMargin" unique_id=912423877]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.862745, 0.909804, 0.980392, 0.98)
 theme_override_font_sizes/font_size = 13
-text = "Local play only\nThree arenas with different match rhythms\nIn-match pause menu on Esc"
+text = "Local play only
+Three arenas with different match rhythms
+In-match pause menu on Esc"
 autowrap_mode = 3
 
-[node name="HomeSpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel"]
+[node name="HomeSpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel" unique_id=527364992]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HomeActions" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel"]
+[node name="HomeActions" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel" unique_id=1007087576]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="HomePrimaryButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel/HomeActions"]
+[node name="HomePrimaryButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel/HomeActions" unique_id=1999200101]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "Play"
 
-[node name="HomeSecondaryButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel/HomeActions"]
+[node name="HomeSecondaryButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/HomePanel/HomeActions" unique_id=2106937534]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "Controls"
 
-[node name="PlayPanel" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages"]
-visible = false
+[node name="PlayPanel" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages" unique_id=696467892]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -358,20 +361,20 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="PlayEyebrow" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel"]
+[node name="PlayEyebrow" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel" unique_id=924456781]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.94902, 0.623529, 0.266667, 1)
 theme_override_font_sizes/font_size = 12
 text = "ARENA SELECT"
 
-[node name="PlayTitle" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel"]
+[node name="PlayTitle" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel" unique_id=1833310309]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.972549, 0.921569, 1)
 theme_override_font_sizes/font_size = 24
 text = "Arena"
 
-[node name="PlayBody" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel"]
+[node name="PlayBody" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel" unique_id=1703015789]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.788235, 0.870588, 0.96)
@@ -379,224 +382,222 @@ theme_override_font_sizes/font_size = 14
 text = "Pick the arena first, then commit with Start Match. This keeps the landing page clean and the actual play flow separate."
 autowrap_mode = 3
 
-[node name="ArenaButtons" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel"]
+[node name="ArenaButtons" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel" unique_id=1163216213]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Level1Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaButtons"]
+[node name="Level1Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaButtons" unique_id=717556320]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Arena 1"
 
-[node name="Level2Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaButtons"]
+[node name="Level2Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaButtons" unique_id=1170405399]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Arena 2"
 
-[node name="Level3Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaButtons"]
+[node name="Level3Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaButtons" unique_id=577278885]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Arena 3"
 
-[node name="SetupCard" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel"]
+[node name="SetupCard" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel" unique_id=1050252539]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_button")
 
-[node name="SetupMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard"]
+[node name="SetupMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard" unique_id=1613289321]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 12
 
-[node name="SetupVBox" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin"]
+[node name="SetupVBox" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin" unique_id=583620000]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="SetupTitle" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox"]
+[node name="SetupTitle" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox" unique_id=144201217]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.972549, 0.921569, 1)
 theme_override_font_sizes/font_size = 16
 text = "Match Setup"
 
-[node name="PlayersRow" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox"]
+[node name="PlayersRow" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox" unique_id=913215391]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="PlayersLabel" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/PlayersRow"]
+[node name="PlayersLabel" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/PlayersRow" unique_id=446543542]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.788235, 0.870588, 0.96)
 theme_override_font_sizes/font_size = 13
 text = "Human Players"
 
-[node name="PlayersSpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/PlayersRow"]
+[node name="PlayersSpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/PlayersRow" unique_id=507498626]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PlayersDownButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/PlayersRow"]
+[node name="PlayersDownButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/PlayersRow" unique_id=1875826185]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 30)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 16
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "-"
 
-[node name="PlayersValue" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/PlayersRow"]
+[node name="PlayersValue" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/PlayersRow" unique_id=598315818]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.972549, 0.921569, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "2"
+horizontal_alignment = 1
 
-[node name="PlayersUpButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/PlayersRow"]
+[node name="PlayersUpButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/PlayersRow" unique_id=1043358393]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 30)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 16
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "+"
 
-[node name="AIRow" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox"]
+[node name="AIRow" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox" unique_id=976917176]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="AILabel" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/AIRow"]
+[node name="AILabel" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/AIRow" unique_id=1046877801]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.788235, 0.870588, 0.96)
 theme_override_font_sizes/font_size = 13
 text = "AI Players"
 
-[node name="AISpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/AIRow"]
+[node name="AISpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/AIRow" unique_id=1017656201]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AIDownButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/AIRow"]
+[node name="AIDownButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/AIRow" unique_id=1819569349]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 30)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 16
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "-"
 
-[node name="AIValue" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/AIRow"]
+[node name="AIValue" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/AIRow" unique_id=1124272101]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.972549, 0.921569, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "0"
+horizontal_alignment = 1
 
-[node name="AIUpButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/AIRow"]
+[node name="AIUpButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox/AIRow" unique_id=1658396680]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 30)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 16
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "+"
 
-[node name="RosterSummary" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox"]
+[node name="RosterSummary" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/SetupCard/SetupMargin/SetupVBox" unique_id=1259694408]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.258824, 0.678431, 0.894118, 1)
 theme_override_font_sizes/font_size = 12
 text = "2 humans  |  2 total"
 
-[node name="ArenaPreview" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel"]
+[node name="ArenaPreview" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel" unique_id=1231922842]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_button")
 
-[node name="ArenaPreviewMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaPreview"]
+[node name="ArenaPreviewMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaPreview" unique_id=448111860]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 12
 
-[node name="ArenaPreviewVBox" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaPreview/ArenaPreviewMargin"]
+[node name="ArenaPreviewVBox" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaPreview/ArenaPreviewMargin" unique_id=1832936045]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="ArenaName" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaPreview/ArenaPreviewMargin/ArenaPreviewVBox"]
+[node name="ArenaName" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaPreview/ArenaPreviewMargin/ArenaPreviewVBox" unique_id=567383394]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.972549, 0.921569, 1)
 theme_override_font_sizes/font_size = 18
 text = "High Courtyard"
 
-[node name="ArenaDescription" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaPreview/ArenaPreviewMargin/ArenaPreviewVBox"]
+[node name="ArenaDescription" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaPreview/ArenaPreviewMargin/ArenaPreviewVBox" unique_id=719412308]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.788235, 0.870588, 0.96)
 theme_override_font_sizes/font_size = 13
-text = ""
 autowrap_mode = 3
 
-[node name="ArenaDetails" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaPreview/ArenaPreviewMargin/ArenaPreviewVBox"]
+[node name="ArenaDetails" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/ArenaPreview/ArenaPreviewMargin/ArenaPreviewVBox" unique_id=1254838504]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.258824, 0.678431, 0.894118, 1)
 theme_override_font_sizes/font_size = 12
-text = ""
 
-[node name="PlaySpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel"]
+[node name="PlaySpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel" unique_id=458633840]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PlayActions" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel"]
+[node name="PlayActions" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel" unique_id=1905079718]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="PlayBackButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/PlayActions"]
+[node name="PlayBackButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/PlayActions" unique_id=409015015]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
@@ -604,13 +605,13 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "Back"
 
-[node name="StartArenaButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/PlayActions"]
+[node name="StartArenaButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/PlayPanel/PlayActions" unique_id=628814173]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
@@ -618,15 +619,15 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "Start"
 
-[node name="ControlsPanel" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages"]
-visible = false
+[node name="ControlsPanel" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages" unique_id=669054548]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -635,20 +636,20 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="ControlsEyebrow" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel"]
+[node name="ControlsEyebrow" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel" unique_id=1526354972]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.94902, 0.623529, 0.266667, 1)
 theme_override_font_sizes/font_size = 12
 text = "CONTROLS"
 
-[node name="ControlsTitle" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel"]
+[node name="ControlsTitle" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel" unique_id=122122860]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.972549, 0.921569, 1)
 theme_override_font_sizes/font_size = 24
 text = "Quick Reference"
 
-[node name="ControlsBody" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel"]
+[node name="ControlsBody" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel" unique_id=203651579]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.788235, 0.870588, 0.96)
@@ -656,104 +657,104 @@ theme_override_font_sizes/font_size = 14
 text = "This panel exists so the front page stays simple. Check inputs here, then go back to arena select when you are ready."
 autowrap_mode = 3
 
-[node name="ControlsRows" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel"]
+[node name="ControlsRows" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel" unique_id=1912211736]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Player1Card" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows"]
+[node name="Player1Card" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows" unique_id=1408483258]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_button")
 
-[node name="Player1Margin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player1Card"]
+[node name="Player1Margin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player1Card" unique_id=1841981066]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 12
 
-[node name="Player1Text" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player1Card/Player1Margin"]
+[node name="Player1Text" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player1Card/Player1Margin" unique_id=1814317861]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.862745, 0.909804, 0.980392, 0.98)
 theme_override_font_sizes/font_size = 13
 text = "P1  WASD  C Jump  F Aim/Shoot  X Dash  |  Pad 1"
 
-[node name="Player2Card" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows"]
+[node name="Player2Card" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows" unique_id=621990153]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_button")
 
-[node name="Player2Margin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player2Card"]
+[node name="Player2Margin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player2Card" unique_id=1156972632]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 12
 
-[node name="Player2Text" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player2Card/Player2Margin"]
+[node name="Player2Text" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player2Card/Player2Margin" unique_id=1442931784]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.862745, 0.909804, 0.980392, 0.98)
 theme_override_font_sizes/font_size = 13
 text = "P2  IJKL  M Jump  P Aim/Shoot  O Dash  |  Pad 2"
 
-[node name="Player3Card" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows"]
+[node name="Player3Card" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows" unique_id=1311729221]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_button")
 
-[node name="Player3Margin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player3Card"]
+[node name="Player3Margin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player3Card" unique_id=397628489]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 12
 
-[node name="Player3Text" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player3Card/Player3Margin"]
+[node name="Player3Text" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player3Card/Player3Margin" unique_id=1096284555]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.862745, 0.909804, 0.980392, 0.98)
 theme_override_font_sizes/font_size = 13
 text = "P3  Gamepad Device 3"
 
-[node name="Player4Card" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows"]
+[node name="Player4Card" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows" unique_id=1942242449]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_button")
 
-[node name="Player4Margin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player4Card"]
+[node name="Player4Margin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player4Card" unique_id=1133361890]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 12
 
-[node name="Player4Text" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player4Card/Player4Margin"]
+[node name="Player4Text" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/Player4Card/Player4Margin" unique_id=1543539974]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.862745, 0.909804, 0.980392, 0.98)
 theme_override_font_sizes/font_size = 13
 text = "P4  Gamepad Device 4"
 
-[node name="MatchCard" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows"]
+[node name="MatchCard" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows" unique_id=1372462819]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_button")
 
-[node name="MatchMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/MatchCard"]
+[node name="MatchMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/MatchCard" unique_id=570311717]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 12
 
-[node name="MatchText" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/MatchCard/MatchMargin"]
+[node name="MatchText" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsRows/MatchCard/MatchMargin" unique_id=1873494797]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.862745, 0.909804, 0.980392, 0.98)
 theme_override_font_sizes/font_size = 13
 text = "Esc  Pause"
 
-[node name="ControlsSpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel"]
+[node name="ControlsSpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel" unique_id=707353194]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ControlsActions" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel"]
+[node name="ControlsActions" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel" unique_id=1693082743]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ControlsBackButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsActions"]
+[node name="ControlsBackButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsActions" unique_id=314549623]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
@@ -761,13 +762,13 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "Back"
 
-[node name="ControlsPlayButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsActions"]
+[node name="ControlsPlayButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/ControlsPanel/ControlsActions" unique_id=1199528595]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
@@ -775,15 +776,15 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "Play"
 
-[node name="WatchPanel" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages"]
-visible = false
+[node name="WatchPanel" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages" unique_id=626704593]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -792,217 +793,215 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="WatchTitle" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel"]
+[node name="WatchTitle" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel" unique_id=1665699864]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.972549, 0.921569, 1)
 theme_override_font_sizes/font_size = 20
 text = "Watch AI Match"
 
-[node name="WatchArenaButtons" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel"]
+[node name="WatchArenaButtons" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel" unique_id=316880871]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="WatchDuelOpenButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons"]
+[node name="WatchDuelOpenButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons" unique_id=1512113622]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Duel - Open"
 
-[node name="WatchDuelPlatformButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons"]
+[node name="WatchDuelPlatformButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons" unique_id=1783563165]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Duel - Platform"
 
-[node name="WatchDuelWrapButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons"]
+[node name="WatchDuelWrapButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons" unique_id=1394186557]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Duel - Wrap"
 
-[node name="WatchLevel1Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons"]
+[node name="WatchLevel1Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons" unique_id=46305719]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Arena 1"
 
-[node name="WatchLevel2Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons"]
+[node name="WatchLevel2Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons" unique_id=408641959]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Arena 2"
 
-[node name="WatchLevel3Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons"]
+[node name="WatchLevel3Button" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons" unique_id=2100054298]
 unique_name_in_owner = true
-toggle_mode = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
+toggle_mode = true
 text = "Arena 3"
 
-[node name="WatchPreview" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel"]
+[node name="WatchPreview" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel" unique_id=1020816657]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_button")
 
-[node name="WatchPreviewMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchPreview"]
+[node name="WatchPreviewMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchPreview" unique_id=1510036218]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 10
 
-[node name="WatchPreviewVBox" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchPreview/WatchPreviewMargin"]
+[node name="WatchPreviewVBox" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchPreview/WatchPreviewMargin" unique_id=277591627]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="WatchArenaName" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchPreview/WatchPreviewMargin/WatchPreviewVBox"]
+[node name="WatchArenaName" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchPreview/WatchPreviewMargin/WatchPreviewVBox" unique_id=575045692]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.972549, 0.921569, 1)
 theme_override_font_sizes/font_size = 16
 text = "Duel - Open"
 
-[node name="WatchArenaDescription" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchPreview/WatchPreviewMargin/WatchPreviewVBox"]
+[node name="WatchArenaDescription" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchPreview/WatchPreviewMargin/WatchPreviewVBox" unique_id=501174261]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.788235, 0.870588, 0.96)
 theme_override_font_sizes/font_size = 13
-text = ""
 autowrap_mode = 3
 
-[node name="WatchArenaDetails" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchPreview/WatchPreviewMargin/WatchPreviewVBox"]
+[node name="WatchArenaDetails" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchPreview/WatchPreviewMargin/WatchPreviewVBox" unique_id=1774557725]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.258824, 0.678431, 0.894118, 1)
 theme_override_font_sizes/font_size = 12
-text = ""
 
-[node name="WatchSetupCard" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel"]
+[node name="WatchSetupCard" type="PanelContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel" unique_id=932770233]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_button")
 
-[node name="WatchSetupMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard"]
+[node name="WatchSetupMargin" type="MarginContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard" unique_id=907732520]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 10
 
-[node name="WatchSetupVBox" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin"]
+[node name="WatchSetupVBox" type="VBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin" unique_id=730628104]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="WatchAIRow" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox"]
+[node name="WatchAIRow" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox" unique_id=322237674]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="WatchAILabel" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow"]
+[node name="WatchAILabel" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow" unique_id=889854690]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.741176, 0.788235, 0.870588, 0.96)
 theme_override_font_sizes/font_size = 13
 text = "AI Bots"
 
-[node name="WatchAISpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow"]
+[node name="WatchAISpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow" unique_id=340672228]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="WatchAIDownButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow"]
+[node name="WatchAIDownButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow" unique_id=2096551223]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 30)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 16
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "-"
 
-[node name="WatchAIValue" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow"]
+[node name="WatchAIValue" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow" unique_id=72223717]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.972549, 0.921569, 1)
 theme_override_font_sizes/font_size = 14
-horizontal_alignment = 1
 text = "2"
+horizontal_alignment = 1
 
-[node name="WatchAIUpButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow"]
+[node name="WatchAIUpButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow" unique_id=656623449]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 30)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 16
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "+"
 
-[node name="WatchAISummary" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox"]
+[node name="WatchAISummary" type="Label" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox" unique_id=1248243727]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.258824, 0.678431, 0.894118, 1)
 theme_override_font_sizes/font_size = 12
 text = "2 AI  |  0 humans"
 
-[node name="WatchSpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel"]
+[node name="WatchSpacer" type="Control" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel" unique_id=1059597860]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="WatchActions" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel"]
+[node name="WatchActions" type="HBoxContainer" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel" unique_id=1900216528]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="WatchBackButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchActions"]
+[node name="WatchBackButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchActions" unique_id=1397980700]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
@@ -1010,13 +1009,13 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "Back"
 
-[node name="WatchStartButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchActions"]
+[node name="WatchStartButton" type="Button" parent="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchActions" unique_id=1725661607]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
@@ -1024,10 +1023,10 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.941176, 0.964706, 1, 1)
 theme_override_colors/font_focus_color = Color(0.0745098, 0.0823529, 0.129412, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_button")
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_active")
 text = "Watch"
 
 [connection signal="pressed" from="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/Sidebar/NavButtons/HomeNavButton" to="." method="_on_home_nav_button_pressed"]
@@ -1054,7 +1053,7 @@ text = "Watch"
 [connection signal="pressed" from="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons/WatchLevel1Button" to="." method="_on_watch_level_1_pressed"]
 [connection signal="pressed" from="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons/WatchLevel2Button" to="." method="_on_watch_level_2_pressed"]
 [connection signal="pressed" from="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchArenaButtons/WatchLevel3Button" to="." method="_on_watch_level_3_pressed"]
-[connection signal="pressed" from="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchActions/WatchBackButton" to="." method="_on_watch_back_button_pressed"]
-[connection signal="pressed" from="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchActions/WatchStartButton" to="." method="_on_watch_start_button_pressed"]
 [connection signal="pressed" from="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow/WatchAIDownButton" to="." method="_on_watch_ai_down_pressed"]
 [connection signal="pressed" from="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchSetupCard/WatchSetupMargin/WatchSetupVBox/WatchAIRow/WatchAIUpButton" to="." method="_on_watch_ai_up_pressed"]
+[connection signal="pressed" from="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchActions/WatchBackButton" to="." method="_on_watch_back_button_pressed"]
+[connection signal="pressed" from="OuterMargin/CenterContainer/Shell/ShellMargin/Layout/ContentCard/ContentMargin/Pages/WatchPanel/WatchActions/WatchStartButton" to="." method="_on_watch_start_button_pressed"]

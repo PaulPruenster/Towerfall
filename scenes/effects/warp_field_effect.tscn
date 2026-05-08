@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cb7omkpx60g4f"]
+
+[ext_resource type="Script" path="res://scripts/effects/warp_field_effect.gd" id="1_1n6ei"]
+[ext_resource type="Shader" path="res://shaders/warp_arrow.gdshader" id="2_by68t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4vm0r"]
+shader = ExtResource("2_by68t")
+shader_parameter/distortion_strength = 0.032
+shader_parameter/radius = 1.0
+shader_parameter/stretch = 1.4
+shader_parameter/forward_pull = 0.5
+shader_parameter/pulse_amount = 0.04
+shader_parameter/pulse_speed = 4.2
+shader_parameter/effect_opacity = 1.0
+
+[node name="WarpFieldEffect" type="Node2D"]
+script = ExtResource("1_1n6ei")
+
+[node name="Field" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_4vm0r")
+color = Color(1, 1, 1, 1)

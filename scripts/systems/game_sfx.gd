@@ -99,6 +99,15 @@ static func _build_stream(event_name: StringName) -> AudioStreamWAV:
 			frequency = 1040.0
 			duration = 0.07
 			amplitude = 0.18
+		&"black_hole_birth":
+			frequency = 82.0
+			duration = 0.36
+			amplitude = 0.5
+			waveform = 2
+		&"black_hole_fade":
+			frequency = 128.0
+			duration = 0.28
+			amplitude = 0.32
 		&"hazard":
 			frequency = 180.0
 			duration = 0.09
@@ -140,7 +149,7 @@ static func _wave(waveform: int, frequency: float, time: float) -> float:
 
 static func _get_volume_db(event_name: StringName) -> float:
 	match event_name:
-		&"death", &"explosion":
+		&"death", &"explosion", &"black_hole_birth":
 			return -7.0
 		&"arrow_hit", &"hurt", &"hazard":
 			return -9.0

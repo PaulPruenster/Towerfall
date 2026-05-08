@@ -35,7 +35,7 @@ scale_curve = SubResource("CurveTexture_f5t13")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cpe45"]
 size = Vector2(18, 2)
 
-[node name="Player" type="CharacterBody2D" groups=["player"]]
+[node name="Player" type="CharacterBody2D" groups=["black_hole_pullable", "player"]]
 script = ExtResource("1_dmoi7")
 deathParticle = ExtResource("2_hq8pn")
 arrow = ExtResource("3_s2ths")

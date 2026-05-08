@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/effects/black_hole.gd" id="1_8w3g3"]
+[ext_resource type="Shader" path="res://shaders/warp_arrow.gdshader" id="2_d38m8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a8n8r"]
+shader = ExtResource("2_d38m8")
+shader_parameter/distortion_strength = 0.047
+shader_parameter/radius = 1.0
+shader_parameter/stretch = 1.0
+shader_parameter/forward_pull = 0.0
+shader_parameter/radial_strength = 1.18
+shader_parameter/directional_pull_strength = 0.0
+shader_parameter/tangential_strength = 0.42
+shader_parameter/pulse_amount = 0.02
+shader_parameter/pulse_speed = 2.6
+shader_parameter/effect_opacity = 0.9
+
+[node name="BlackHoleEffect" type="Node2D"]
+script = ExtResource("1_8w3g3")
+z_index = 55
+
+[node name="WarpField" type="ColorRect" parent="."]
+show_behind_parent = true
+z_index = -1
+material = SubResource("ShaderMaterial_a8n8r")
+color = Color(1, 1, 1, 1)

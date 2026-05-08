@@ -42,6 +42,8 @@ const ARROW_SPAWN_DISTANCE: float = 18.0
 const AIM_PREVIEW_START_DISTANCE: float = 4.0
 const HIT_STOP_DURATION: float = 0.035
 const KILL_HIT_STOP_DURATION: float = 0.08
+const BLACK_HOLE_PULL_ACCELERATION: float = 2400.0
+const BLACK_HOLE_MAX_PULL_SPEED: float = 1950.0
 const DASH_READY_FLASH_TIME: float = 0.24
 const SHOOT_LOCK_TIME: float = 0.1
 const RUN_ANIMATION_THRESHOLD: float = 20.0
@@ -159,6 +161,7 @@ var _controller_jump_pressed: bool = false
 var _controller_dash_pressed: bool = false
 var _using_controller_input: bool = false
 var _current_control_direction: Vector2 = Vector2.ZERO
+var _black_hole_pending_pull: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	if not animated_sprite.animation_finished.is_connected(_on_animated_sprite_2d_animation_finished):
@@ -332,6 +335,19 @@ func launch_from_pad(launch_velocity: Vector2, inherit_horizontal_velocity: bool
 
 	velocity = new_velocity
 	jumping = true
+
+func apply_black_hole_pull(center: Vector2, normalized_strength: float, delta: float) -> void:
+	if is_dying or normalized_strength <= 0.0:
+		return
+
+	var offset := center - global_position
+	var distance := offset.length()
+	if distance <= 0.001:
+		return
+
+	_black_hole_pending_pull += (offset / distance) * BLACK_HOLE_PULL_ACCELERATION * normalized_strength * delta
+	if _black_hole_pending_pull.length() > BLACK_HOLE_MAX_PULL_SPEED:
+		_black_hole_pending_pull = _black_hole_pending_pull.limit_length(BLACK_HOLE_MAX_PULL_SPEED)
 
 func get_loaded_arrow_type() -> int:
 	if special_arrow_count > 0:
@@ -920,6 +936,8 @@ func _physics_process(delta: float) -> void:
 		if not dashing:
 			velocity.x = move_toward(velocity.x, 0.0, get_current_speed() / 5.0)
 
+	velocity += _black_hole_pending_pull
+	_black_hole_pending_pull = Vector2.ZERO
 	move_and_slide()
 	_wrap_to_viewport()
 
